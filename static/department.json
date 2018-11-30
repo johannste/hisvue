@@ -1,0 +1,12 @@
+{
+	"department": [
+		{"deptName": "内科", "deptEngName": "Internal"},
+   	{"deptName": "外科", "deptEngName": "Surgery"},
+    {"deptName": "妇产科", "deptEngName": "Obstetrics_Gynecology"},
+    {"deptName": "男科", "deptEngName": "Andrology"},
+    {"deptName": "儿科", "deptEngName": "Paediatrics"},
+    {"deptName": "五官科", "deptEngName": "Five_Sense_Organs"},
+    {"deptName": "骨科", "deptEngName": "Orthopedics"},
+    {"deptName": "精神科", "deptEngName": "Psychiatry"}
+  ]
+}
