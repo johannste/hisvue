@@ -48,7 +48,7 @@
           <el-select v-model="selectCity1" placeholder="选择城市份">
             <el-option v-for="item in ruleForm.citys" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <el-input v-model="ruleForm.moreAddress" placeholder="更加详细地址" label-width:200px></el-input>
+          <el-input v-model="ruleForm.moreAddress" placeholder="更加详细地址"></el-input>
         </el-form-item>
       </div>
       <br>
@@ -259,6 +259,7 @@ export default {
 
   .addPatient .el-form
     padding-bottom: 20px
+    text-align: center
 
   .addPatient .el-textarea__inner
     width: 500px

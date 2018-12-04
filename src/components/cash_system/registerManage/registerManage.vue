@@ -28,7 +28,7 @@
       </el-table-column>
     </el-table>
     <!-- 点击查看患者挂号详细信息 -->
-    <el-dialog title="患者挂号信息" :visible.sync="dialogVisible" :before-close="handleClose">
+    <el-dialog title="患者挂号信息" :visible.sync="dialogVisible">
       <ul class="patientsdetail">
         <li><h5>挂号序号：</h5><span>{{patientsdetails.number}}</span></li>
         <li><h5>患者姓名:</h5><span>{{patientsdetails.name}}</span></li>
@@ -43,10 +43,6 @@
         <li><h5>候诊号:</h5><span></span></li>
         <li><h5>挂号费:</h5><span></span></li>
       </ul>
-      <h5 slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </h5>
     </el-dialog>
 
   </div>

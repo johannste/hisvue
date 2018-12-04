@@ -14,12 +14,12 @@
       </el-form-item>
       <p class="register-isshow" v-if="register.certificate_value === 'idCard'">
         <el-form-item label="身份证号" prop="cardNumber" class="register-name">
-          <el-input v-model="register.cardNumber"></el-input>
+          <el-input v-model="card_number"></el-input>
         </el-form-item>
       </p>
       <p class="register-isshow" v-else-if="register.certificate_value === 'healthCard'">
         <el-form-item label="健康证号" prop="cardNumber" class="register-name">
-          <el-input v-model="register.cardNumber"></el-input>
+          <el-input v-model="card_number"></el-input>
         </el-form-item>
       </p>
       <p v-else></p>
@@ -42,7 +42,7 @@
       </p>
       <p v-if="doctorvalue">
         <el-form-item label="候诊号：" class="register-name">
-          <span>待计算</span>
+          <span>{{ register.register_number }}</span>
         </el-form-item>
       </p>
       <p v-if="doctorvalue">
@@ -80,9 +80,11 @@
           department_value: '',
           doctor_value: '',
           visit_time: '',
+          register_number: '',
           expense: '',
           visit_date: ''
         },
+        card_number: '',
         departmentvalue: '',
         doctorvalue: '',
         department: [],
@@ -112,6 +114,7 @@
     created () {
       this.register.visit_time = this.compute_visitTime();
       this.register.visit_date = new Date().toLocaleDateString();
+      this.register.register_number = this.compute_registerNumber();
       this.$http.get('http://localhost:8081/dept/all').then((response) => {
         this.department = response.data;
       }, response => {
@@ -125,7 +128,7 @@
         this.$refs.registerForm.validate((valid) => {
           console.log(JSON.stringify(this.register));
           if (valid) {
-            this.$notify({
+            this.$notify.success({
               message: '提交成功',
               type: 'success'
             });
@@ -156,6 +159,9 @@
           time = '14:00 - 17:30';
         }
         return time;
+      },
+      compute_registerNumber () {
+        this.$http.get('http://localhost:8081/patient/getLastSerialNumber');
       }
     },
     watch: {
@@ -180,6 +186,30 @@
             this.register.expense = this.doctor[i].expense;
           }
         }
+      },
+      card_number: function () {
+        if (this.card_number.length === 18 && this.register.certificate_value === 'idCard') {
+          this.register.cardNumber = this.card_number;
+          console.log(this.register.cardNumber);
+          this.$http.get('http://localhost:8081/patient/queryIndentify?identifyNumber=' + this.card_number).then((response) => {
+            if (response.data === true) {
+              this.$notify.success({
+                message: '身份已识别'
+              });
+            } else {
+              this.$notify.error({
+                message: '1秒后将跳转到信息注册页面'
+              });
+              setTimeout(() => {
+                this.$router.push({path: 'addPatient'});
+              }, 1000);
+            };
+          }, response => {
+            this.$notify.error({
+              message: '数据请求失败'
+            });
+          });
+        };
       }
     }
   };
