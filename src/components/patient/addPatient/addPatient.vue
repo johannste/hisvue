@@ -210,11 +210,12 @@ export default {
     };
   },
   mounted () {
-    let me = this;
-    me.$http.get(api.provinces).then(function (response) {
-      me.ruleForm.provinces = response.data.provinces;
-    }, function (response) {
-      alert('请求失败了');
+    this.$http.get(api.provinces).then(function (response) {
+      this.ruleForm.provinces = response.data.provinces;
+    }, response => {
+      this.$notify.error({
+        message: '数据请求失败'
+      });
     });
   },
   methods: {
@@ -259,7 +260,6 @@ export default {
 
   .addPatient .el-form
     padding-bottom: 20px
-    text-align: center
 
   .addPatient .el-textarea__inner
     width: 500px
@@ -276,5 +276,4 @@ export default {
 
   .addPatient .el-form-item
     display: inline-block
-
 </style>
