@@ -13,12 +13,12 @@
         </el-form-item>
         <el-form-item label="患者来源" prop="region">
           <el-select v-model="ruleForm.region" placeholder="请选择患者来源">
-            <el-option label="挂号" value="guahao"></el-option>
-            <el-option label="门诊" value="menzhen"></el-option>
-            <el-option label="急诊" value="jizhen"></el-option>
-            <el-option label="化验" value="huayan"></el-option>
-            <el-option label="手术" value="shoushu"></el-option>
-            <el-option label="住院" value="huayan"></el-option>
+            <el-option label="挂号" value="0"></el-option>
+            <el-option label="门诊" value="1"></el-option>
+            <el-option label="急诊" value="2"></el-option>
+            <el-option label="化验" value="3"></el-option>
+            <el-option label="手术" value="4"></el-option>
+            <el-option label="住院" value="5"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="idCard">
@@ -62,16 +62,11 @@
         </el-form-item>
         <el-form-item label="与患者关系" prop="relation">
           <el-select v-model="ruleForm.relation" placeholder="与患者关系">
-            <el-option label="父子" value="1"></el-option>
-            <el-option label="父女" value="2"></el-option>
-            <el-option label="母子" value="3"></el-option>
-            <el-option label="母女" value="4"></el-option>
-            <el-option label="兄弟" value="5"></el-option>
-            <el-option label="姐妹" value="6"></el-option>
-            <el-option label="亲戚" value="7"></el-option>
-            <el-option label="朋友" value="8"></el-option>
-            <el-option label="监护人" value="9"></el-option>
-            <el-option label="其他" value="10"></el-option>
+            <el-option label="父亲" value="0"></el-option>
+            <el-option label="母亲" value="1"></el-option>
+            <el-option label="亲戚" value="2"></el-option>
+            <el-option label="朋友" value="3"></el-option>
+            <el-option label="其他" value="4"></el-option>
           </el-select>
         </el-form-item>
       </div>
@@ -122,7 +117,13 @@ export default {
       if (/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value) === false) {
         callback(new Error('身份证号有误'));
       } else {
-        this.ruleForm.age = 1;
+        var year = new Date().getFullYear();
+        this.ruleForm.gender = value % 2 === 0 ? 0 : 1;
+        if (value.length === 18) {
+          this.ruleForm.age = year - value.substring(6, 10);
+        } else if (value.length === 15) {
+          this.ruleForm.age = year - ('19' + value.substring(6, 12)).substring(0, 4);
+        }
         callback();
       }
     };

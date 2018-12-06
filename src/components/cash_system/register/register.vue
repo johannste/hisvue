@@ -4,7 +4,7 @@
     margin-bottom: 25px;" class="register-title">挂 号 办 理</div>
     <el-form :model="register" :rules="rules" ref="registerForm" label-width="100px" class="register-ruleForm">
       <el-form-item label="患者姓名" prop="patientName" class="register-name">
-        <el-input v-model="register.patientName"></el-input>
+        <el-input disabled v-model="register.patientName"></el-input>
       </el-form-item>
       <el-form-item label="办理凭证" prop="certificate_value" class="register-certificate">
         <el-select v-model="register.certificate_value" placeholder="请选择办理凭证">
@@ -63,18 +63,16 @@
     data () {
       let checkCertificate = (rule, value, callback) => {
         if (/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value) === false) {
-          console.log(this.register.cardNumber);
           callback(new Error('身份证号有误'));
         } else {
           console.log(this.register.cardNumber);
           this.$http.get('http://localhost:8081/patient/queryIndentify?identifyNumber=' + this.register.cardNumber).then((response) => {
-            if (response.data === true) {
-              this.$notify.success({
-                message: '身份已识别'
-              });
+            console.log(response);
+            if (response.bodyText !== null) {
+              this.register.patientName = response.bodyText;
             } else {
               this.$notify.error({
-                message: '1秒后将跳转到信息注册页面'
+                message: '即将跳转到注册页面'
               });
               setTimeout(() => {
                 this.$router.push({path: 'addPatient'});
