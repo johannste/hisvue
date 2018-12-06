@@ -2,7 +2,7 @@
   <div class="addPatient">
     <el-form :model="ruleForm" class="demo-ruleForm" ref="ruleForm" :rules="rules" label-width="100px" >
       <h1 class="record">
-        新建患者档案:
+        新建患者档案
         <span class="demonstration">建档日期</span>
         <el-date-picker v-model="ruleForm.date" type="date" placeholder="选择日期" :picker-options="pickerOptions" prop="date"></el-date-picker>
       </h1>
@@ -27,28 +27,28 @@
       </div>
       <div>
         <el-form-item label="患者年龄" prop="age">
-          <el-input v-model.number="ruleForm.age"></el-input>
+          <el-input disabled v-model.number="ruleForm.age"></el-input>
         </el-form-item>
         <el-form-item label="联系方式" prop="phone">
           <el-input v-model="ruleForm.phone"></el-input>
         </el-form-item>
-        <el-form-item label="患者性别" prop="sex">
-          <el-radio-group v-model="ruleForm.sex">
-            <el-radio :label="1" label-width="150px">男</el-radio>
-            <el-radio :label="2" label-width="150px">女</el-radio>
+        <el-form-item label="患者性别" prop="gender">
+          <el-radio-group disabled v-model="ruleForm.gender">
+            <el-radio :label="0" label-width="150px">男</el-radio>
+            <el-radio :label="1" label-width="150px">女</el-radio>
           </el-radio-group>
         </el-form-item>
       </div>
       <div>
         <el-form-item label="家庭地址">
-          <el-select v-model="selectProvince1" placeholder="选择省份">
-            <el-option v-for="item in ruleForm.provinces" :key="item.value" :label="item.label" :value="item.value">
+          <el-select v-model="selectProvince" placeholder="选择省份">
+            <el-option v-for="item in provinces" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
-          <el-select v-model="selectCity1" placeholder="选择城市份">
-            <el-option v-for="item in ruleForm.citys" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-select v-model="selectCity" placeholder="选择城市">
+            <el-option v-for="item in citys" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <el-input v-model="ruleForm.moreAddress" placeholder="更加详细地址"></el-input>
+          <el-input v-model="ruleForm.moreAddress" placeholder="详细地址"></el-input>
         </el-form-item>
       </div>
       <br>
@@ -87,22 +87,6 @@
         </el-form-item>
       </div>
       <div>
-        <h3>医生信息</h3>
-        <el-form-item label="主治医生姓名" prop="doctor">
-          <el-input v-model="ruleForm.doctor"></el-input>
-        </el-form-item>
-        <el-form-item label="科室" prop="department">
-          <el-select v-model="ruleForm.department" placeholder="选择科室">
-            <el-option label="外科" value="1"></el-option>
-            <el-option label="内科" value="2"></el-option>
-            <el-option label="妇产科" value="3"></el-option>
-            <el-option label="骨科" value="4"></el-option>
-            <el-option label="儿科学" value="5"></el-option>
-            <el-option label="其他" value="6"></el-option>
-          </el-select>
-        </el-form-item>
-      </div>
-      <div>
         <el-form-item class="center">
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
           <el-button @click="offReset('ruleForm')">重置</el-button>
@@ -115,18 +99,6 @@
 import {api} from '../../../global/api.js';
 export default {
   data () {
-    let checkAge = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('年龄不能为空'));
-      };
-      setTimeout(() => {
-        if (/^\d+$/.test(value) === false) {
-          callback(new Error('请输入数字值'));
-        } else {
-          callback();
-        }
-      }, 300);
-    };
     var checkName = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('姓名不能为空'));
@@ -138,27 +110,21 @@ export default {
       if (!value) {
         return callback(new Error('电话不能为空'));
       };
-      setTimeout(() => {
-        if (/^\d+$/.test(value) === false) {
-          callback(new Error('请输入数字值'));
-        } else if (value.length > 11) {
-          callback(new Error('请输入正确号码'));
-        } else {
-          callback();
-        }
-      }, 500);
+      if (/^\d+$/.test(value) === false) {
+        callback(new Error('请输入数字值'));
+      } else if (value.length > 11) {
+        callback(new Error('请输入正确号码'));
+      } else {
+        callback();
+      }
     };
-    var checkidCard = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('身份证号不能为空'));
-      };
-      setTimeout(() => {
-        if (/^(\w){6,20}$/.test(value) === false) {
-          callback(new Error('请输入正确身份证号码'));
-        } else {
-          callback();
-        }
-      }, 500);
+    let checkIdCard = (rule, value, callback) => {
+      if (/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value) === false) {
+        callback(new Error('身份证号有误'));
+      } else {
+        this.ruleForm.age = 1;
+        callback();
+      }
     };
     return {
       ruleForm: {
@@ -166,22 +132,21 @@ export default {
         name: '',
         region: '',
         idCard: '',
-        sex: 2,
+        gender: '',
         age: '',
         phone: '',
         Name: '',
         Phone: '',
         relation: '',
-        address: '',
-        provinces: [],
-        citys: [],
+        province: '',
+        city: '',
         moreAddress: '',
-        symptoms: '',
-        doctor: '',
-        department: ''
+        symptoms: ''
       },
-      selectProvince1: '',
-      selectCity1: '',
+      provinces: [],
+      citys: [],
+      selectProvince: '',
+      selectCity: '',
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() < Date.now - 8.64e7;
@@ -191,9 +156,6 @@ export default {
         name: [
           { required: true, validator: checkName, trigger: 'blur' }
         ],
-        age: [
-          { required: true, validator: checkAge, trigger: 'blur' }
-        ],
         phone: [
           { required: true, validator: checkPhone, trigger: 'blur' }
         ],
@@ -201,17 +163,14 @@ export default {
           { required: true, trigger: 'blur' }
         ],
         idCard: [
-          { required: true, validator: checkidCard, trigger: 'blur' }
-        ],
-        sex: [
-          { required: true, trigger: 'blur' }
+          { required: true, validator: checkIdCard, trigger: 'blur' }
         ]
       }
     };
   },
   mounted () {
     this.$http.get(api.provinces).then(function (response) {
-      this.ruleForm.provinces = response.data.provinces;
+      this.provinces = response.data.provinces;
     }, response => {
       this.$notify.error({
         message: '数据请求失败'
@@ -233,18 +192,22 @@ export default {
       this.$refs[form].resetFields();
       this.ruleForm.date = '';
       this.ruleForm.moreAddress = '';
-      this.selectProvince1 = '';
-      this.selectCity1 = '';
+      this.selectProvince = '';
+      this.selectCity = '';
     }
   },
   watch: {
-    selectProvince1: function () {
-      // console.log(this.selectProvince1);
-      for (let i = 0; i < this.ruleForm.provinces.length; i++) {
-        if (this.selectProvince1 === this.ruleForm.provinces[i].value) {
-          this.ruleForm.citys = this.ruleForm.provinces[i].citys;
+    selectProvince: function () {
+      // console.log(this.selectProvince);
+      this.ruleForm.province = this.selectProvince;
+      for (let i = 0; i < this.provinces.length; i++) {
+        if (this.selectProvince === this.provinces[i].value) {
+          this.citys = this.provinces[i].citys;
         }
       }
+    },
+    selectCity: function () {
+      this.ruleForm.city = this.selectCity;
     }
   }
 };
@@ -260,19 +223,21 @@ export default {
 
   .addPatient .el-form
     padding-bottom: 20px
+    max-width: 1000px
+    margin-left: auto
+    margin-right: auto
 
   .addPatient .el-textarea__inner
     width: 500px
 
-  .addPatient .center
-    padding-left: 200px
-
   .addPatient .demonstration
     color: #333
     font-size: 24px
+    text-align: right
 
   .addPatient .record
     font-size: 28px
+    text-align: center
 
   .addPatient .el-form-item
     display: inline-block

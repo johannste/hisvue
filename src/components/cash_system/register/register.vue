@@ -14,12 +14,12 @@
       </el-form-item>
       <p class="register-isshow" v-if="register.certificate_value === 'idCard'">
         <el-form-item label="身份证号" prop="cardNumber" class="register-name">
-          <el-input v-model="card_number"></el-input>
+          <el-input v-model="register.cardNumber"></el-input>
         </el-form-item>
       </p>
       <p class="register-isshow" v-else-if="register.certificate_value === 'healthCard'">
         <el-form-item label="健康证号" prop="cardNumber" class="register-name">
-          <el-input v-model="card_number"></el-input>
+          <el-input v-model="register.cardNumber"></el-input>
         </el-form-item>
       </p>
       <p v-else></p>
@@ -62,14 +62,30 @@
   export default {
     data () {
       let checkCertificate = (rule, value, callback) => {
-        if (/^\d+$/.test(value) !== false) {
-          if (value.length !== 18) {
-            callback(new Error('身份证号应为18位数！'));
-          } else {
-            callback();
-          }
+        if (/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value) === false) {
+          console.log(this.register.cardNumber);
+          callback(new Error('身份证号有误'));
         } else {
-          callback(new Error('请输入数字值！'));
+          console.log(this.register.cardNumber);
+          this.$http.get('http://localhost:8081/patient/queryIndentify?identifyNumber=' + this.register.cardNumber).then((response) => {
+            if (response.data === true) {
+              this.$notify.success({
+                message: '身份已识别'
+              });
+            } else {
+              this.$notify.error({
+                message: '1秒后将跳转到信息注册页面'
+              });
+              setTimeout(() => {
+                this.$router.push({path: 'addPatient'});
+              }, 1000);
+            };
+          }, response => {
+            this.$notify.error({
+              message: '数据请求失败'
+            });
+          });
+          callback();
         }
       };
       return {
@@ -84,7 +100,6 @@
           expense: '',
           visit_date: ''
         },
-        card_number: '',
         departmentvalue: '',
         doctorvalue: '',
         department: [],
@@ -129,13 +144,11 @@
           console.log(JSON.stringify(this.register));
           if (valid) {
             this.$notify.success({
-              message: '提交成功',
-              type: 'success'
+              message: '提交成功'
             });
           } else {
             this.$notify.error({
-              message: '提交失败',
-              type: 'error'
+              message: '提交失败'
             });
             return false;
           }
@@ -186,30 +199,6 @@
             this.register.expense = this.doctor[i].expense;
           }
         }
-      },
-      card_number: function () {
-        if (this.card_number.length === 18 && this.register.certificate_value === 'idCard') {
-          this.register.cardNumber = this.card_number;
-          console.log(this.register.cardNumber);
-          this.$http.get('http://localhost:8081/patient/queryIndentify?identifyNumber=' + this.card_number).then((response) => {
-            if (response.data === true) {
-              this.$notify.success({
-                message: '身份已识别'
-              });
-            } else {
-              this.$notify.error({
-                message: '1秒后将跳转到信息注册页面'
-              });
-              setTimeout(() => {
-                this.$router.push({path: 'addPatient'});
-              }, 1000);
-            };
-          }, response => {
-            this.$notify.error({
-              message: '数据请求失败'
-            });
-          });
-        };
       }
     }
   };
