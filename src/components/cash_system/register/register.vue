@@ -65,10 +65,8 @@
         if (/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value) === false) {
           callback(new Error('身份证号有误'));
         } else {
-          console.log(this.register.cardNumber);
           this.$http.get('http://localhost:8081/patient/queryIndentify?identifyNumber=' + this.register.cardNumber).then((response) => {
-            console.log(response);
-            if (response.bodyText !== null) {
+            if (response.bodyText !== '') {
               this.register.patientName = response.bodyText;
             } else {
               this.$notify.error({
@@ -128,7 +126,7 @@
       this.register.visit_time = this.compute_visitTime();
       this.register.visit_date = new Date().toLocaleDateString();
       this.register.register_number = this.compute_registerNumber();
-      this.$http.get('http://localhost:8081/dept/all').then((response) => {
+      this.$http.get('http://localhost:8081/dept/all').then(response => {
         this.department = response.data;
       }, response => {
         this.$notify.error({
@@ -138,8 +136,7 @@
     },
     methods: {
       submitForm (formName) {
-        this.$refs.registerForm.validate((valid) => {
-          console.log(JSON.stringify(this.register));
+        this.$refs.registerForm.validate(valid => {
           if (valid) {
             this.$notify.success({
               message: '提交成功'
@@ -148,7 +145,6 @@
             this.$notify.error({
               message: '提交失败'
             });
-            return false;
           }
         });
       },
@@ -178,7 +174,7 @@
     watch: {
       departmentvalue: function () {
         this.register.department_value = this.departmentvalue;
-        this.$http.get('http://localhost:8081/doctor/findBy?id=' + this.departmentvalue).then((response) => {
+        this.$http.get('http://localhost:8081/doctor/findBy?id=' + this.departmentvalue).then(response => {
           this.doctor = [];
           this.register.doctor_value = '';
           for (let i = 0; i < response.data.length; i++) {

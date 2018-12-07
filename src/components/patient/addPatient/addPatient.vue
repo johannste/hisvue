@@ -1,31 +1,19 @@
 <template>
   <div class="addPatient">
     <el-form :model="ruleForm" class="demo-ruleForm" ref="ruleForm" :rules="rules" label-width="100px" >
-      <h1 class="record">
-        新建患者档案
-        <span class="demonstration">建档日期</span>
-        <el-date-picker v-model="ruleForm.date" type="date" placeholder="选择日期" :picker-options="pickerOptions" prop="date"></el-date-picker>
-      </h1>
-      <br><br>
-      <div>
+      <h1 class="record">新建患者档案</h1><br/>
         <el-form-item label="患者姓名" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="患者来源" prop="region">
           <el-select v-model="ruleForm.region" placeholder="请选择患者来源">
-            <el-option label="挂号" value="0"></el-option>
-            <el-option label="门诊" value="1"></el-option>
-            <el-option label="急诊" value="2"></el-option>
-            <el-option label="化验" value="3"></el-option>
-            <el-option label="手术" value="4"></el-option>
-            <el-option label="住院" value="5"></el-option>
+            <el-option v-for="item in regions" :key="item.id" :label="item.type" :value="item.id">
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="idCard">
           <el-input v-model="ruleForm.idCard"></el-input>
         </el-form-item>
-      </div>
-      <div>
         <el-form-item label="患者年龄" prop="age">
           <el-input disabled v-model.number="ruleForm.age"></el-input>
         </el-form-item>
@@ -38,55 +26,40 @@
             <el-radio :label="1" label-width="150px">女</el-radio>
           </el-radio-group>
         </el-form-item>
-      </div>
-      <div>
         <el-form-item label="家庭地址">
           <el-select v-model="selectProvince" placeholder="选择省份">
-            <el-option v-for="item in provinces" :key="item.value" :label="item.label" :value="item.value">
+            <el-option v-for="item in provinces" :key="item.value" :label="item.value" :value="item.value">
             </el-option>
           </el-select>
           <el-select v-model="selectCity" placeholder="选择城市">
-            <el-option v-for="item in citys" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in citys" :key="item.value" :label="item.value" :value="item.value"></el-option>
           </el-select>
           <el-input v-model="ruleForm.moreAddress" placeholder="详细地址"></el-input>
+        </el-form-item><br/>
+      <h3>联系人资料</h3><br/>
+        <el-form-item label="联系人姓名" prop="relatedName">
+          <el-input v-model="ruleForm.relatedName"></el-input>
         </el-form-item>
-      </div>
-      <br>
-      <h3>联系人资料</h3><br>
-      <div>
-        <el-form-item label="联系人姓名" prop="Name">
-          <el-input v-model="ruleForm.Name"></el-input>
+        <el-form-item label="联系方式" prop="relatedPhoneNumber">
+          <el-input v-model="ruleForm.relatedPhoneNumber"></el-input>
         </el-form-item>
-        <el-form-item label="联系方式" prop="Phone">
-          <el-input v-model.number="ruleForm.Phone"></el-input>
-        </el-form-item>
-        <el-form-item label="与患者关系" prop="relation">
-          <el-select v-model="ruleForm.relation" placeholder="与患者关系">
-            <el-option label="父亲" value="0"></el-option>
-            <el-option label="母亲" value="1"></el-option>
-            <el-option label="亲戚" value="2"></el-option>
-            <el-option label="朋友" value="3"></el-option>
-            <el-option label="其他" value="4"></el-option>
+        <el-form-item label="与患者关系" prop="relationship">
+          <el-select v-model="ruleForm.relationship" placeholder="与患者关系">
+            <el-option v-for="item in relations" :key="item.id" :label="item.type" :value="item.id">
+            </el-option>
           </el-select>
         </el-form-item>
-      </div>
-      <div>
         <el-form-item label="目前身体状况" prop="symptoms">
           <el-input type="textarea" v-model="ruleForm.symptoms"></el-input>
         </el-form-item>
-      </div>
-      <div>
-        <h3>是否有病史？如果有，请简单说明</h3><br>
+        <h3>是否有病史？如果有，请简单说明</h3><br/>
         <el-form-item label="病史简单说明" prop="illHistory">
           <el-input type="textarea" v-model="ruleForm.illHistory"></el-input>
         </el-form-item>
-      </div>
-      <div>
         <el-form-item class="center">
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
           <el-button @click="offReset('ruleForm')">重置</el-button>
         </el-form-item>
-      </div>
     </el-form>
   </div>
 </template>
@@ -94,20 +67,15 @@
 import {api} from '../../../global/api.js';
 export default {
   data () {
-    var checkName = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('姓名不能为空'));
+    let checkPhone = (rule, value, callback) => {
+      if (/^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/.test(value) === false) {
+        callback(new Error('请输入正确号码'));
       } else {
         callback();
       }
     };
-    var checkPhone = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('电话不能为空'));
-      };
-      if (/^\d+$/.test(value) === false) {
-        callback(new Error('请输入数字值'));
-      } else if (value.length > 11) {
+    let checkRelatedPhoneNumber = (rule, value, callback) => {
+      if (value && /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/.test(value) === false) {
         callback(new Error('请输入正确号码'));
       } else {
         callback();
@@ -127,23 +95,33 @@ export default {
         callback();
       }
     };
+    let checkRegion = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请选择来源'));
+      } else {
+        callback();
+      }
+    };
     return {
       ruleForm: {
-        date: '',
+        createDate: new Date(),
         name: '',
         region: '',
         idCard: '',
         gender: '',
         age: '',
         phone: '',
-        Name: '',
-        Phone: '',
-        relation: '',
+        relatedName: '',
+        relatedPhoneNumber: '',
+        relationship: '',
         province: '',
         city: '',
         moreAddress: '',
-        symptoms: ''
+        symptoms: '',
+        illHistory: ''
       },
+      regions: [],
+      relations: [],
       provinces: [],
       citys: [],
       selectProvince: '',
@@ -155,13 +133,16 @@ export default {
       },
       rules: {
         name: [
-          { required: true, validator: checkName, trigger: 'blur' }
+          { required: true, trigger: 'blur' }
         ],
         phone: [
           { required: true, validator: checkPhone, trigger: 'blur' }
         ],
+        relatedPhoneNumber: [
+          { validator: checkRelatedPhoneNumber, trigger: 'blur' }
+        ],
         region: [
-          { required: true, trigger: 'blur' }
+          { required: true, validator: checkRegion, trigger: 'change' }
         ],
         idCard: [
           { required: true, validator: checkIdCard, trigger: 'blur' }
@@ -170,8 +151,22 @@ export default {
     };
   },
   mounted () {
-    this.$http.get(api.provinces).then(function (response) {
+    this.$http.get(api.provinces).then(response => {
       this.provinces = response.data.provinces;
+    }, response => {
+      this.$notify.error({
+        message: '数据请求失败'
+      });
+    });
+    this.$http.get('http://localhost:8081/patient/queryRegion').then(response => {
+      this.regions = response.data;
+    }, response => {
+      this.$notify.error({
+        message: '数据请求失败'
+      });
+    });
+    this.$http.get('http://localhost:8081/patient/queryRelationship').then(response => {
+      this.relations = response.data;
     }, response => {
       this.$notify.error({
         message: '数据请求失败'
@@ -180,14 +175,19 @@ export default {
   },
   methods: {
     onSubmit () {
-      // let me = this;
-      // this.$http.post('../../static/patient/addPatient.json').then(function (response) {
-      //   console.log('这是我们需要的json数据', response.ruleForm);
-      //   me.ruleForm = me.data.ruleForm;
-      // }, function (response) {
-      //   alert('请求失败了');
-      // });
-      console.log('您修改后的参数为：', JSON.stringify(this.ruleForm));
+      this.$refs.ruleForm.validate(valid => {
+        this.$http.post(
+          'http://localhost:8081/patient/registerPatient', JSON.stringify(this.ruleForm)
+        ).then(response => {
+          this.$notify.success({
+            message: '注册成功'
+          });
+        }, response => {
+          this.$notify.error({
+            message: '注册失败'
+          });
+        });
+      });
     },
     offReset (form) {
       this.$refs[form].resetFields();
@@ -199,7 +199,6 @@ export default {
   },
   watch: {
     selectProvince: function () {
-      // console.log(this.selectProvince);
       this.ruleForm.province = this.selectProvince;
       for (let i = 0; i < this.provinces.length; i++) {
         if (this.selectProvince === this.provinces[i].value) {
@@ -213,7 +212,6 @@ export default {
   }
 };
 </script>
-<!-- <script src="https://unpkg.com/vue"></script> -->
 <style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
   .addPatient .el-input, .addPatient .el-input__inner
     display: inline-block
@@ -242,4 +240,8 @@ export default {
 
   .addPatient .el-form-item
     display: inline-block
+
+  .addPatient .center
+    text-align: center
+    display: block
 </style>
