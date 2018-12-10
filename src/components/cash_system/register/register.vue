@@ -71,23 +71,21 @@
           if (/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value) === false) {
             callback(new Error());
           } else {
-            callback(checkIdentify());
-            // TODO
+            this.$http.get('http://localhost:8081/patient/queryIdentify?identifyNumber=' + this.register.cardNumber).then(response => {
+              if (response.data.length === 1) {
+                this.register.patientName = response.data[0].name;
+                callback();
+              } else {
+                this.register.patientName = '';
+                callback(new Error());
+                this.dialogVisible = true;
+              }
+            }, response => {
+              console.log('数据请求失败');
+            });
           }
           break;
         }
-      };
-      let checkIdentify = (rule, value, callback) => {
-        this.$http.get('http://localhost:8081/patient/queryIdentify?identifyNumber=' + this.register.cardNumber).then(response => {
-          if (response.bodyText !== '') {
-            this.register.patientName = response.bodyText;
-          } else {
-            this.register.patientName = '';
-            // this.dialogVisible = true;
-          }
-        }, response => {
-          console.log('数据请求失败');
-        });
       };
       return {
         register: {
