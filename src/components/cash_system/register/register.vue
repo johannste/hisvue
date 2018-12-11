@@ -29,17 +29,23 @@
         </el-select>
       </el-form-item>
       <p v-if="doctorValue">
-        <el-form-item label="就诊时间：" class="register-name">
+        <el-form-item label="就诊日期：" class="register-name" prop="date">
           <el-date-picker v-model="register.date"
                           :editable="false"
                           @change="compute_time"
-                          format="yyyy-MM-dd HH:mm"
-                          value-format="yyyy-MM-dd HH:mm"
-                          type="datetime"
-                          placeholder="选择就诊时间"
+                          format="yyyy-MM-dd"
+                          value-format="yyyy-MM-dd"
+                          type="date"
+                          placeholder="选择就诊日期"
                           :picker-options="pickerOptions0"
                           prop="date">
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="就诊时段：" class="register-name" prop="time">
+          <el-select v-model="register.time" placeholder="请选择就诊时段">
+            <!--<el-option v-for="items in timeRange" :key="items.id" :label="items.range" :value="items.range">-->
+            </el-option>
+          </el-select>
         </el-form-item>
       </p>
       <p v-if="doctorValue">
@@ -88,7 +94,7 @@
                 this.dialogVisible = true;
               }
             }, response => {
-              console.log('数据请求失败');
+              console.error('数据请求失败');
             });
           }
           break;
@@ -103,7 +109,8 @@
           doctor_value: '',
           register_number: '',
           expense: '',
-          date: ''
+          date: '',
+          time: []
         },
         dialogVisible: false,
         certificateValue: '',
@@ -112,6 +119,7 @@
         identifyType: [],
         department: [],
         doctor: [],
+        timeRange: [],
         pickerOptions0: {
           disabledDate (time) {
             return time.getTime() < Date.now() - 8.64e7;
@@ -138,6 +146,12 @@
           ],
           doctor_value: [
             {required: true, message: '请选择医生', trigger: 'change'}
+          ],
+          date: [
+            {required: true}
+          ],
+          time: [
+            {required: true}
           ]
         }
       };
@@ -147,17 +161,21 @@
       this.$http.get('http://localhost:8081/dept/all').then(response => {
         this.department = response.data;
       }, response => {
-        console.log('科室获取失败');
+        console.error('科室获取失败');
       });
       this.$http.get('http://localhost:8081/patient/queryIdentifyType').then(response => {
         this.identifyType = response.data;
       }, response => {
-        console.log('办理凭证获取失败');
+        console.error('办理凭证获取失败');
+      });
+      this.$http.get('http://localhost:8081/patient/queryDignoseTimeRange').then(response => {
+        this.timeRange = response.data;
+      }, response => {
+        console.error('就诊时段获取失败');
       });
     },
     methods: {
       compute_time (time) {
-        console.log(time);
         this.register.date = time;
       },
       submitForm (formName) {

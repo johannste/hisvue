@@ -66,7 +66,6 @@
 </template>
 <script type="text/ecmascript-6">
   import {api} from '../../../global/api.js';
-
   export default {
     data () {
       let checkPhone = (rule, value, callback) => {
@@ -171,31 +170,23 @@
       this.$http.get(api.provinces).then(response => {
         this.provinces = response.data.provinces;
       }, response => {
-        this.$notify.error({
-          message: '数据请求失败'
-        });
+        console.error('省市请求失败');
       });
       this.$http.get('http://localhost:8081/patient/queryRegion').then(response => {
         this.regions = response.data;
       }, response => {
-        this.$notify.error({
-          message: '数据请求失败'
-        });
+        console.error('患者来源请求失败');
       });
       this.$http.get('http://localhost:8081/patient/queryRelationship').then(response => {
         this.relations = response.data;
       }, response => {
-        this.$notify.error({
-          message: '数据请求失败'
-        });
+        console.error('与患者关系请求失败');
       });
     },
     methods: {
       onSubmit () {
         this.$refs.ruleForm.validate(valid => {
-          this.$http.post(
-            'http://localhost:8081/patient/registerPatient', JSON.stringify(this.ruleForm)
-          ).then(response => {
+          this.$http.post('http://localhost:8081/patient/registerPatient', JSON.stringify(this.ruleForm)).then(response => {
             this.$notify.success({
               message: '注册成功'
             });
