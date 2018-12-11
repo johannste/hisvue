@@ -169,6 +169,8 @@
         console.error('办理凭证获取失败');
       });
       this.$http.get('http://localhost:8081/patient/queryDignoseTimeRange').then(response => {
+        console.log(JSON.stringify(response.data));
+        // TODO
         this.timeRange = response.data;
       }, response => {
         console.error('就诊时段获取失败');
