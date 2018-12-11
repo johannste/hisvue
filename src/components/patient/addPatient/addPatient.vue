@@ -15,7 +15,7 @@
         <el-input v-model="ruleForm.idCard"></el-input>
       </el-form-item>
       <el-form-item label="患者年龄" prop="age">
-        <el-input disabled v-model.number="ruleForm.age"></el-input>
+        <el-input disabled v-model="ruleForm.age"></el-input>
       </el-form-item>
       <el-form-item label="联系方式" prop="phone">
         <el-input v-model="ruleForm.phone"></el-input>
@@ -148,6 +148,21 @@
           ],
           idCard: [
             {required: true, validator: checkIdCard, trigger: 'blur'}
+          ],
+          age: [
+            {required: true}
+          ],
+          gender: [
+            {required: true}
+          ],
+          province: [
+            {required: true}
+          ],
+          city: [
+            {required: true}
+          ],
+          moreAddress: [
+            {required: true}
           ]
         }
       };
