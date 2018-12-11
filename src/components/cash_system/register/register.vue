@@ -7,7 +7,7 @@
       <el-form-item label="患者姓名" prop="patientName" class="register-name">
         <el-input disabled v-model="register.patientName" placeholder="请输入身份信息"></el-input>
       </el-form-item>
-      <el-form-item label="办理凭证" prop="certificate_value" class="register-certificate">
+      <el-form-item label="证件类型" prop="certificate_value" class="register-certificate">
         <el-select v-model="certificateValue" placeholder="请选择办理凭证">
           <el-option v-for="items in identifyType" :key="items.type" :label="items.type" :value="items.id">
           </el-option>
@@ -110,6 +110,9 @@
           patientName: [
             {required: true, message: '请输入身份信息', trigger: 'change'}
           ],
+          certificate_value: [
+            {required: true}
+          ],
           certificateValue: [
             {required: true, message: '请选择办理凭证', trigger: 'change'}
           ],
@@ -119,11 +122,11 @@
           departmentValue: [
             {required: true, message: '请至少选择一个科室', trigger: 'change'}
           ],
-          doctorValue: [
-            {required: true, message: '请选择医生', trigger: 'change'}
+          department_value: [
+            {required: true}
           ],
-          visit_time: [
-            {required: true, message: '请填写活动形式', trigger: 'blur'}
+          doctor_value: [
+            {required: true, message: '请选择医生', trigger: 'change'}
           ]
         }
       };
@@ -178,7 +181,9 @@
         return time;
       },
       compute_registerNumber () {
-        this.$http.get('http://localhost:8081/patient/getLastSerialNumber');
+        this.$http.get('http://localhost:8081/patient/getLastSerialNumber').then(response => {
+          this.register.register_number = response.bodyText;
+        });
       },
       toRegistry () {
         this.$router.push({path: 'addPatient'});
