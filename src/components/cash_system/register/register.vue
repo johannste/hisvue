@@ -1,9 +1,7 @@
 <template>
   <div class="register">
-    <div style="text-align: center;font-size: 24px;
-    margin-bottom: 25px;" class="register-title">挂 号 办 理
-    </div>
     <el-form :model="register" :rules="rules" ref="registerForm" label-width="100px" class="register-ruleForm">
+      <h1 class="register-title">挂号办理</h1><br/>
       <el-form-item label="患者姓名" prop="patientName" class="register-name">
         <el-input disabled v-model="register.patientName" placeholder="请输入身份信息"></el-input>
       </el-form-item>
@@ -32,7 +30,16 @@
       </el-form-item>
       <p v-if="doctorValue">
         <el-form-item label="就诊时间：" class="register-name">
-          <span>{{ register.visit_date }}  {{ register.visit_time }}</span>
+          <el-date-picker v-model="register.date"
+                          :editable="false"
+                          @change="compute_time"
+                          format="yyyy-MM-dd HH:mm"
+                          value-format="yyyy-MM-dd HH:mm"
+                          type="datetime"
+                          placeholder="选择就诊时间"
+                          :picker-options="pickerOptions0"
+                          prop="date">
+          </el-date-picker>
         </el-form-item>
       </p>
       <p v-if="doctorValue">
@@ -94,10 +101,9 @@
           cardNumber: '',
           department_value: '',
           doctor_value: '',
-          visit_time: '',
           register_number: '',
           expense: '',
-          visit_date: ''
+          date: ''
         },
         dialogVisible: false,
         certificateValue: '',
@@ -106,6 +112,11 @@
         identifyType: [],
         department: [],
         doctor: [],
+        pickerOptions0: {
+          disabledDate (time) {
+            return time.getTime() < Date.now() - 8.64e7;
+          }
+        },
         rules: {
           patientName: [
             {required: true, message: '请输入身份信息', trigger: 'change'}
@@ -132,8 +143,6 @@
       };
     },
     created () {
-      this.register.visit_time = this.compute_visitTime();
-      this.register.visit_date = new Date().toLocaleDateString();
       this.register.register_number = this.compute_registerNumber();
       this.$http.get('http://localhost:8081/dept/all').then(response => {
         this.department = response.data;
@@ -147,6 +156,10 @@
       });
     },
     methods: {
+      compute_time (time) {
+        console.log(time);
+        this.register.date = time;
+      },
       submitForm (formName) {
         console.log(JSON.stringify(this.register));
         this.$refs.registerForm.validate(valid => {
@@ -164,21 +177,6 @@
       resetForm (formName) {
         this.$refs.registerForm.resetFields();
         this.departmentvalue = '';
-      },
-      compute_visitTime () {
-        var hour = new Date().getHours();
-        var minutes = new Date().getMinutes();
-        var time = '';
-        if (hour < 11) {
-          time = '8:00 - 11:30';
-        } else if (hour === 11) {
-          if (minutes < 30) {
-            time = '8:00 - 11:30';
-          }
-        } else {
-          time = '14:00 - 17:30';
-        }
-        return time;
       },
       compute_registerNumber () {
         this.$http.get('http://localhost:8081/patient/getLastSerialNumber').then(response => {
@@ -221,13 +219,18 @@
 
 <style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
   .register
+    .register-title
+     font-size: 28px
+     text-align: center
+
     .register-ruleForm
       width: 30%
       margin: 0 auto
       padding-left: 20px
+
       .register-name
         width: 315px
 
-  .register .el-input, .register .el-input__inner
-    width: 210px
+    .el-input, .register .el-input__inner
+      width: 210px
 </style>

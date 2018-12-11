@@ -230,35 +230,36 @@
   };
 </script>
 <style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
-  .addPatient .el-input, .addPatient .el-input__inner
-    display: inline-block
-    width: 192px
+  .addPatient
+    .el-input, .addPatient .el-input__inner
+      display: inline-block
+      width: 192px
 
-  .addPatient .el-form-item
-    padding-right: 30px
+    .el-form-item
+      padding-right: 30px
 
-  .addPatient .el-form
-    padding-bottom: 20px
-    max-width: 1000px
-    margin-left: auto
-    margin-right: auto
+    .el-form
+      padding-bottom: 20px
+      max-width: 1000px
+      margin-left: auto
+      margin-right: auto
 
-  .addPatient .el-textarea__inner
-    width: 500px
+    .el-textarea__inner
+      width: 500px
 
-  .addPatient .demonstration
-    color: #333
-    font-size: 24px
-    text-align: right
+    .demonstration
+      color: #333
+      font-size: 24px
+      text-align: right
 
-  .addPatient .record
-    font-size: 28px
-    text-align: center
+    .record
+      font-size: 28px
+      text-align: center
 
-  .addPatient .el-form-item
-    display: inline-block
+    .el-form-item
+      display: inline-block
 
-  .addPatient .center
-    text-align: center
-    display: block
+    .center
+      text-align: center
+      display: block
 </style>
