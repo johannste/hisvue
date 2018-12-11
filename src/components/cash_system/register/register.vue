@@ -5,32 +5,32 @@
       <el-form-item label="患者姓名" prop="patientName" class="register-name">
         <el-input disabled v-model="register.patientName" placeholder="请输入身份信息"></el-input>
       </el-form-item>
-      <el-form-item label="证件类型" prop="certificate_value" class="register-certificate">
+      <el-form-item label="证件类型" prop="identifyType" class="register-certificate">
         <el-select v-model="certificateValue" placeholder="请选择办理凭证">
           <el-option v-for="items in identifyType" :key="items.type" :label="items.type" :value="items.id">
           </el-option>
         </el-select>
       </el-form-item>
-      <p class="register-isShow" v-if="register.certificate_value !== ''">
-        <el-form-item label="证件号" prop="cardNumber" class="register-name">
-          <el-input v-model="register.cardNumber"></el-input>
+      <p class="register-isShow" v-if="register.identifyType !== ''">
+        <el-form-item label="证件号" prop="identifyNumber" class="register-name">
+          <el-input v-model="register.identifyNumber"></el-input>
         </el-form-item>
       </p>
-      <el-form-item label="科室" prop="department_value">
+      <el-form-item label="科室" prop="departmentId">
         <el-select v-model="departmentValue" placeholder="请选择科室">
           <el-option v-for="items in department" :key="items.id" :label="items.deptName" :value="items.id">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="就诊医生" prop="doctor_value" class="register-certificate">
+      <el-form-item label="就诊医生" prop="doctorId" class="register-certificate">
         <el-select v-model="doctorValue" placeholder="请选择就诊医生">
-          <el-option v-for="items in doctor" :key="items.id" :label="items.name" :value="items.name">
+          <el-option v-for="items in doctor" :key="items.id" :label="items.name" :value="items.id">
           </el-option>
         </el-select>
       </el-form-item>
       <p v-if="doctorValue">
-        <el-form-item label="就诊日期：" class="register-name" prop="date">
-          <el-date-picker v-model="register.date"
+        <el-form-item label="就诊日期：" class="register-name" prop="registerDate">
+          <el-date-picker v-model="register.registerDate"
                           :editable="false"
                           @change="compute_time"
                           format="yyyy-MM-dd"
@@ -38,19 +38,19 @@
                           type="date"
                           placeholder="选择就诊日期"
                           :picker-options="pickerOptions0"
-                          prop="date">
+                          prop="registerDate">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="就诊时段：" class="register-name" prop="time">
-          <el-select v-model="register.time" placeholder="请选择就诊时段">
-            <!--<el-option v-for="items in timeRange" :key="items.id" :label="items.range" :value="items.range">-->
+        <el-form-item label="就诊时段：" class="register-name" prop="diagnoseTime">
+          <el-select v-model="register.diagnoseTime" placeholder="请选择就诊时段">
+            <el-option v-for="items in timeRange" :key="items.id" :label="items.range" :value="items.id">
             </el-option>
           </el-select>
         </el-form-item>
       </p>
       <p v-if="doctorValue">
         <el-form-item label="候诊号：" class="register-name">
-          <span>{{ register.register_number }}</span>
+          <span>{{ register.registerNumber }}</span>
         </el-form-item>
       </p>
       <p v-if="doctorValue">
@@ -79,12 +79,12 @@
   export default {
     data () {
       let checkCertificate = (rule, value, callback) => {
-        switch (this.register.certificate_value) {
+        switch (this.register.identifyType) {
         case 0:
           if (/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value) === false) {
             callback(new Error());
           } else {
-            this.$http.get('http://localhost:8081/patient/queryIdentify?identifyNumber=' + this.register.cardNumber).then(response => {
+            this.$http.get('http://localhost:8081/patient/queryIdentify?identifyNumber=' + this.register.identifyNumber).then(response => {
               if (response.data.length === 1) {
                 this.register.patientName = response.data[0].name;
                 callback();
@@ -103,14 +103,14 @@
       return {
         register: {
           patientName: '',
-          certificate_value: '',
-          cardNumber: '',
-          department_value: '',
-          doctor_value: '',
-          register_number: '',
+          identifyType: '',
+          identifyNumber: '',
+          departmentId: '',
+          doctorId: '',
+          registerNumber: '',
           expense: '',
-          date: '',
-          time: []
+          registerDate: '',
+          diagnoseTime: []
         },
         dialogVisible: false,
         certificateValue: '',
@@ -129,35 +129,35 @@
           patientName: [
             {required: true, message: '请输入身份信息', trigger: 'change'}
           ],
-          certificate_value: [
+          identifyType: [
             {required: true}
           ],
           certificateValue: [
             {required: true, message: '请选择办理凭证', trigger: 'change'}
           ],
-          cardNumber: [
+          identifyNumber: [
             {required: true, message: '未识别身份信息', validator: checkCertificate, trigger: 'blur'}
           ],
           departmentValue: [
             {required: true, message: '请至少选择一个科室', trigger: 'change'}
           ],
-          department_value: [
+          departmentId: [
             {required: true}
           ],
-          doctor_value: [
+          doctorId: [
             {required: true, message: '请选择医生', trigger: 'change'}
           ],
-          date: [
+          registerDate: [
             {required: true}
           ],
-          time: [
+          diagnoseTime: [
             {required: true}
           ]
         }
       };
     },
     created () {
-      this.register.register_number = this.compute_registerNumber();
+      this.register.registerNumber = this.compute_registerNumber();
       this.$http.get('http://localhost:8081/dept/all').then(response => {
         this.department = response.data;
       }, response => {
@@ -168,9 +168,7 @@
       }, response => {
         console.error('办理凭证获取失败');
       });
-      this.$http.get('http://localhost:8081/patient/queryDignoseTimeRange').then(response => {
-        console.log(JSON.stringify(response.data));
-        // TODO
+      this.$http.get('http://localhost:8081/patient/queryDiagnoseTimeRange').then(response => {
         this.timeRange = response.data;
       }, response => {
         console.error('就诊时段获取失败');
@@ -178,20 +176,21 @@
     },
     methods: {
       compute_time (time) {
-        this.register.date = time;
+        this.register.registerDate = time;
       },
       submitForm (formName) {
         console.log(JSON.stringify(this.register));
         this.$refs.registerForm.validate(valid => {
-          if (valid) {
-            this.$notify.success({
-              message: '提交成功'
-            });
-          } else {
-            this.$notify.error({
-              message: '提交失败'
-            });
-          }
+          // TODO
+          // this.$http.post('http://localhost:8081/patient/registration', JSON.stringify(this.register)).then(response => {
+          //   this.$notify.success({
+          //     message: '注册成功'
+          //   });
+          // }, response => {
+          //   this.$notify.error({
+          //     message: '注册失败'
+          //   });
+          // });
         });
       },
       resetForm (formName) {
@@ -200,7 +199,7 @@
       },
       compute_registerNumber () {
         this.$http.get('http://localhost:8081/patient/getLastSerialNumber').then(response => {
-          this.register.register_number = response.bodyText;
+          this.register.registerNumber = response.bodyText;
         });
       },
       toRegistry () {
@@ -209,7 +208,7 @@
     },
     watch: {
       departmentValue: function () {
-        this.register.department_value = this.departmentValue;
+        this.register.departmentId = this.departmentValue;
         this.$http.get('http://localhost:8081/doctor/findBy?id=' + this.departmentValue).then(response => {
           this.doctor = [];
           this.doctorValue = '';
@@ -223,15 +222,15 @@
         });
       },
       doctorValue: function () {
-        this.register.doctor_value = this.doctorValue;
+        this.register.doctorId = this.doctorValue + '';
         for (let i = 0; i < this.doctor.length; i++) {
-          if (this.register.doctor_value === this.doctor[i].name) {
+          if (this.register.doctorId === this.doctor[i].id + '') {
             this.register.expense = this.doctor[i].expense;
           }
         }
       },
       certificateValue: function () {
-        this.register.certificate_value = this.certificateValue;
+        this.register.identifyType = this.certificateValue;
       }
     }
   };
