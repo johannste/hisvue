@@ -6,6 +6,7 @@ import router from './router';
 import store from './store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-default/index.css';
+
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
@@ -15,12 +16,10 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App },
+  components: {App},
   render: h => h(App)
 });
 router.beforeEach((to, from, next) => {
-  console.log('=====to, from, to.path');
-  console.log(to, '\n', from, '\n', to.path);
   if (to.path !== '/login' && !sessionStorage.getItem('easeHis')) {
     this.$router.push({path: 'login'});
   } else if (to.path !== '/internal') {

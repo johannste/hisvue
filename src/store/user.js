@@ -1,17 +1,11 @@
 import * as userInfo from './userInfo';
 // 重新刷新页面不出来了 mark!!!!
 const state = {
-  // 用户登录状态,存储在sessionStorage中，防止刷新后没了
-  // easeHis: sessionStorage.getItem('easeHis') ? JSON.parse(sessionStorage.getItem('easeHis')) : false,
-  // easeHisType: sessionStorage.getItem('easeHisType') ? JSON.parse(sessionStorage.getItem('easeHisType')) : false
   easeHis: sessionStorage.getItem('easeHis') ? sessionStorage.getItem('easeHis') : false,
   easeHisType: sessionStorage.getItem('easeHisType') ? sessionStorage.getItem('easeHisType') : false
 };
 
 const actions = {
-  /**
-   * 用户登录
-   */
   setUserInfo ({commit}, res) { // 这里的res可以由页面传过来，改变底下的true或者false
     sessionStorage.setItem('easeHis', res.name);
     sessionStorage.setItem('easeHisType', res.type);
@@ -19,9 +13,6 @@ const actions = {
     commit(userInfo.SET_LOGIN_TYPE, res.type);
   },
 
-  /**
-   * 退出登录
-   */
   setSignOut ({commit}) {
     sessionStorage.removeItem('easeHis');
     sessionStorage.removeItem('easeHisType');

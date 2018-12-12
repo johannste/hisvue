@@ -1,8 +1,8 @@
 {
   "name": "his",
   "version": "1.0.0",
-  "description": "安逸医院内部信息管理系统",
-  "author": "mingming <2324607198@qq.com>",
+  "description": "医院内部信息管理系统",
+  "author": "zhouzy <saint.sola@yahoo.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
