@@ -9,7 +9,7 @@
     </div>
     <el-table :data="prescriptionC">
       <el-table-column type="expand">
-        <template scope="props">
+        <template slot-scope="props">
           <el-form label-position="left" inline class="form-expand">
             <el-form-item label="科别：">
               <span>{{ props.row.disease }}</span>
@@ -59,7 +59,7 @@
       <el-table-column label="审核药师" prop="pharmacist">
       </el-table-column>
       <el-table-column label="操作" width="210">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-button type="primary" @click="refuseprescriptionC(scope.$index)">驳回药方</el-button>
           <el-button type="primary" @click="acceptprescriptionC(scope.$index)">出药</el-button>
         </template>

@@ -10,7 +10,7 @@
             <el-table-column prop="date" label="投诉日期" width="180"></el-table-column>
             <el-table-column prop="containts" label="投诉内容" width="500"></el-table-column>
             <el-table-column label="操作">
-              <template scope="scope">
+              <template slot-scope="scope">
                 <el-button size="small" @click.native.prevent="lookforPatient(scope.$index)">查看患者信息</el-button>
                 <el-button size="small" type="danger" @click.native.prevent="delectPatient(scope.$index, complaintPatientList)">删除</el-button>
               </template>

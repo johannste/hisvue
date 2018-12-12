@@ -21,7 +21,7 @@
       <el-table-column prop="quantity" label="库存（件/克）" width="110"></el-table-column>
       <el-table-column prop="price" label="单价（元）" width="110"></el-table-column>
       <el-table-column label="操作" width="90">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-button type="primary" @click="checkDetail(scope.$index)">查看</el-button>
         </template>
       </el-table-column>

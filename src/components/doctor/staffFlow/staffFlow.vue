@@ -8,7 +8,7 @@
       <el-table :data="staffFlowlist" style="width: 100%;" height="500">
         <!-- <el-table-column label="人员流动信息表" class="tittle"> -->
           <el-table-column type="expand">
-            <template scope="props">
+            <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="姓名">
                   <span>{{ props.row.name }}</span>

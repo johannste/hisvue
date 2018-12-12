@@ -8,7 +8,7 @@
       <el-table-column prop="outOfTime" label="配送时间"></el-table-column>
       <el-table-column prop="manufacturers" label="厂家"></el-table-column>
       <el-table-column label="操作">
-        <template prop="outOfTime" scope="scope">
+        <template prop="outOfTime" slot-scope="scope">
           <el-button v-if="!drug[scope.$index].outOfTime" size="small" @click="handleChange(scope.$index, scope.row)" type="danger">配送</el-button>
           <el-button class="handleOut" v-else="drug[scope.$index].outOfTime" size="small">已配送</el-button>
         </template>

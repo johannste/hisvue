@@ -6,7 +6,7 @@
 
     <el-table :data="table" height="480" border style="width: 100%">
     <el-table-column label="序号" width="100">
-      <template scope="scope">{{ scope.$index }}</template>
+      <template slot-scope="scope">{{ scope.$index }}</template>
     </el-table-column>
     <el-table-column
       prop="complainant"
@@ -31,7 +31,7 @@
       label="联系方式">
     </el-table-column>
     <el-table-column align="center" label="操作">
-      <template scope="scope">
+      <template slot-scope="scope">
         <el-button size="small" @click="dialogVisible = true">回复</el-button>
         <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
       </template>

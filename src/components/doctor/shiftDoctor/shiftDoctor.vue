@@ -8,14 +8,14 @@
     </div>
     <el-table :data="shiftList" border style="width: 100%;">
       <el-table-column fixed prop="date" label="轮班日期" width="120">
-        <template scope="scope">
+        <template slot-scope="scope">
           {{scope.row.date}}
         </template>
       </el-table-column>
       <el-table-column fixed prop="dates" label="时段" width="200">
       </el-table-column>
       <el-table-column fixed prop="index" label="序号" width="80">
-        <template scope="scope">
+        <template slot-scope="scope">
           {{scope.$index}}
         </template>
       </el-table-column>
@@ -32,7 +32,7 @@
       <el-table-column fixed prop="signatory" label="主任签名" width="120">
       </el-table-column>
       <el-table-column fixed="right" prop="operate" label="操作" width="180">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-button @click.native.prevent="edictDoctor(scope.$index, scope.row)" type="primary" size="small">编辑</el-button>
           <el-button @click.native.prevent="delectDoctor(scope.$index, shiftList)" type="danger" size="small">删除</el-button>
         </template>

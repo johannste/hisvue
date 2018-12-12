@@ -19,7 +19,7 @@
 
     <el-table v-if="table" :data="table" border style="width: 100%" height="400">
     <el-table-column label="序号" width="120" fixed>
-      <template scope="scope">{{ scope.$index }}</template>
+      <template slot-scope="scope">{{ scope.$index }}</template>
     </el-table-column>
     <el-table-column prop="date" fixed label="日期" width="120"></el-table-column>
     <el-table-column prop="time" label="时段" width="200"></el-table-column>
@@ -30,7 +30,7 @@
     <el-table-column prop="attendence" label="出勤情况" width="120" v-model="listQuery.type"></el-table-column>
     <el-table-column prop="signature" label="护士长签名" width="120"></el-table-column>
     <el-table-column align="center" label="操作">
-      <template scope="scope">
+      <template slot-scope="scope">
         <el-button size="small" @click="handleEdit(scope.$index)">编辑</el-button>
         <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
       </template>

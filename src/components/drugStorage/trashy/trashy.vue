@@ -9,7 +9,7 @@
     </el-popover>
     <div class="headerBt">
       <router-link to="addTrashy"><el-button size="small">添加消耗信息</el-button></router-link>
-      <el-button size="small" type="danger"  v-popover:popover5>删除全部</el-button>
+      <el-button size="small" type="danger" v-popover:popover5>删除全部</el-button>
     </div>
     <el-table :data="trashyDrug">
       <el-table-column prop="name" label="药品名称"></el-table-column>
@@ -18,7 +18,7 @@
       <el-table-column prop="trashy" label="原因"></el-table-column>
       <el-table-column prop="manufacturers" label="厂家"></el-table-column>
       <el-table-column label="操作">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-button
             size="small"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>

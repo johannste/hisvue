@@ -15,7 +15,7 @@
     <el-table :data="tableData" border style="width:100%;" @selection-change="handleSelectionChange">
       <el-table-column type="selection"></el-table-column>
       <el-table-column align="center" label='序号'>
-        <template scope="scope">
+        <template slot-scope="scope">
           {{scope.$index}}
         </template>
       </el-table-column>
@@ -25,7 +25,7 @@
       <el-table-column label="年龄" prop="age"></el-table-column>
       <el-table-column label="主治医生" prop="doctor"></el-table-column>
       <el-table-column type="expand">
-        <template scope="props">
+        <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="建档日期">
               <span>{{ props.row.date }}</span>
@@ -76,7 +76,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
           <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>

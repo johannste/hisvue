@@ -10,7 +10,7 @@
     <!-- 表格 -->
     <el-table :data="doctorlist" border style="width: 100%;">
       <el-table-column fixed prop="index" label="序号" width="100">
-        <template scope="scope">
+        <template slot-scope="scope">
           {{scope.$index}}
         </template>
       </el-table-column>
@@ -19,7 +19,7 @@
       <el-table-column fixed prop="sex" label="性别" width="150">
       </el-table-column>
       <el-table-column fixed  label="入职日期" width="150">
-        <template scope="scope">
+        <template slot-scope="scope">
           {{scope.row.date}}
         </template>
       </el-table-column>
@@ -32,7 +32,7 @@
       <el-table-column fixed prop="office" label="科室" width="150">
       </el-table-column>
       <el-table-column fixed="right" prop="operate" label="操作" width="150">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-button @click.native.prevent="edictDoctor(scope.$index)" type="primary" size="small">编辑</el-button>
           <el-button @click.native.prevent="delectDoctor(scope.$index, doctorlist)" type="danger" size="small">删除</el-button>
         </template>

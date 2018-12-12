@@ -10,7 +10,7 @@
     :data="table"
     style="width: 100%">
     <el-table-column type="expand">
-      <template scope="props">
+      <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
           <el-form-item label="姓名:">
             <span>{{ props.row.name }}</span>
@@ -52,14 +52,14 @@
       </template>
     </el-table-column>
     <el-table-column label="序号">
-      <template scope="scope">{{ scope.$index }}</template>
+      <template slot-scope="scope">{{ scope.$index }}</template>
     </el-table-column>
     <el-table-column label="姓名" prop="name"></el-table-column>
     <el-table-column label="员工编号" prop="number"></el-table-column>
     <el-table-column label="科室" prop="department"></el-table-column>
     <el-table-column label="处理人" prop="processor"></el-table-column>
     <el-table-column align="center" label="操作">
-      <template scope="scope">
+      <template slot-scope="scope">
         <!-- <el-button size="small" type="primary" @click="handleCreate">添加</el-button> -->
         <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
       </template>

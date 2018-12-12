@@ -19,7 +19,7 @@
       <el-table ref="multipleTable" :data="table" border tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="序号" width="50">
-      <template scope="scope">{{ scope.$index }}</template>
+      <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
       <el-table-column prop="name" label="姓名" sortable width="120"></el-table-column>
       <el-table-column prop="address" label="地址" show-overflow-tooltip></el-table-column>
@@ -31,7 +31,7 @@
       <el-table-column prop="profession" label="专业" show-overflow-tooltip></el-table-column>
       <el-table-column prop="date" label="入职时间" sortable show-overflow-tooltip></el-table-column>
       <el-table-column align="center" label="操作">
-      <template scope="scope">
+      <template slot-scope="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
       </template>
