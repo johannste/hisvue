@@ -179,18 +179,16 @@
         this.register.registerDate = time;
       },
       submitForm (formName) {
-        console.log(JSON.stringify(this.register));
         this.$refs.registerForm.validate(valid => {
-          // TODO
-          // this.$http.post('http://localhost:8081/patient/registration', JSON.stringify(this.register)).then(response => {
-          //   this.$notify.success({
-          //     message: '注册成功'
-          //   });
-          // }, response => {
-          //   this.$notify.error({
-          //     message: '注册失败'
-          //   });
-          // });
+          this.$http.post('http://localhost:8081/patient/registration', JSON.stringify(this.register)).then(response => {
+            this.$notify.success({
+              message: '注册成功'
+            });
+          }, response => {
+            this.$notify.error({
+              message: '注册失败'
+            });
+          });
         });
       },
       resetForm (formName) {
