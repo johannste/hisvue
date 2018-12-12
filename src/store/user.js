@@ -1,12 +1,11 @@
 import * as userInfo from './userInfo';
-// 重新刷新页面不出来了 mark!!!!
 const state = {
   easeHis: sessionStorage.getItem('easeHis') ? sessionStorage.getItem('easeHis') : false,
   easeHisType: sessionStorage.getItem('easeHisType') ? sessionStorage.getItem('easeHisType') : false
 };
 
 const actions = {
-  setUserInfo ({commit}, res) { // 这里的res可以由页面传过来，改变底下的true或者false
+  setUserInfo ({commit}, res) {
     sessionStorage.setItem('easeHis', res.name);
     sessionStorage.setItem('easeHisType', res.type);
     commit(userInfo.SET_LOGIN_NAME, res.name);
