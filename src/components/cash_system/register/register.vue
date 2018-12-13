@@ -196,7 +196,7 @@
         this.departmentvalue = '';
       },
       compute_registerNumber () {
-        this.$http.get('http://localhost:8081/patient/getLastSerialNumber').then(response => {
+        this.$http.post('http://localhost:8081/patient/getLastSerialNumber?bizCode=00').then(response => {
           this.register.registerNumber = response.bodyText;
         });
       },
