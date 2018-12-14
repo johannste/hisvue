@@ -186,15 +186,17 @@
     methods: {
       onSubmit () {
         this.$refs.ruleForm.validate(valid => {
-          this.$http.post('http://localhost:8081/patient/registerPatient', JSON.stringify(this.ruleForm)).then(response => {
-            this.$notify.success({
-              message: '注册成功'
+          if (valid) {
+            this.$http.post('http://localhost:8081/patient/registerPatient', JSON.stringify(this.ruleForm)).then(response => {
+              this.$notify.success({
+                message: '注册成功'
+              });
+            }, response => {
+              this.$notify.error({
+                message: '注册失败'
+              });
             });
-          }, response => {
-            this.$notify.error({
-              message: '注册失败'
-            });
-          });
+          }
         });
       },
       offReset (form) {

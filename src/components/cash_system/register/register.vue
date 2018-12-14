@@ -180,15 +180,17 @@
       },
       submitForm (formName) {
         this.$refs.registerForm.validate(valid => {
-          this.$http.post('http://localhost:8081/patient/registration', JSON.stringify(this.register)).then(response => {
-            this.$notify.success({
-              message: '注册成功'
+          if (valid) {
+            this.$http.post('http://localhost:8081/patient/registration', JSON.stringify(this.register)).then(response => {
+              this.$notify.success({
+                message: '注册成功'
+              });
+            }, response => {
+              this.$notify.error({
+                message: '注册失败'
+              });
             });
-          }, response => {
-            this.$notify.error({
-              message: '注册失败'
-            });
-          });
+          }
         });
       },
       resetForm (formName) {
