@@ -29,7 +29,7 @@
     </el-table>
     <!-- 点击查看患者挂号详细信息 -->
     <el-dialog title="患者挂号信息" :visible.sync="dialogVisible">
-      <ul class="patientsdetail">
+      <ul class="patients-detail">
         <li><h5>挂号序号：</h5><span>{{patientsdetails.number}}</span></li>
         <li><h5>患者姓名:</h5><span>{{patientsdetails.name}}</span></li>
         <li><h5>挂号凭证:</h5><span></span></li>
@@ -151,17 +151,21 @@
 
 <style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
   .registerManage .filter-container
-    padding-bottom:30px
+      padding-bottom: 30px
+
     .el-input
       width: 200px
-  .registerManage .el-table-column
-    font-weight: bold
-  .registerManage .patientsdetail
-    h5
-      display: inline-block
-      width: 100px
-      line-height: 30px
+
+    .el-table-column
       font-weight: bold
-  .registerManage .btn
-      display: inline-block
+
+    .patients-detail
+      h5
+        display: inline-block
+        width: 100px
+        line-height: 30px
+        font-weight: bold
+
+    .btn
+        display: inline-block
 </style>
