@@ -93,6 +93,8 @@
                 callback(new Error());
                 this.dialogVisible = true;
               }
+            }, response => {
+              console.error('数据请求失败');
             });
           }
           break;
