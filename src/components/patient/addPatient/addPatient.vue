@@ -188,14 +188,12 @@
         this.$refs.ruleForm.validate(valid => {
           if (valid) {
             this.$axios.post('http://localhost:8081/patient/registerPatient', JSON.stringify(this.ruleForm)).then(response => {
-              this.$notify.success({
-                message: '注册成功'
-              });
+              if (response.data === true) {
+                this.$notify.success('注册成功');
+              }
             }).catch(error => {
               console.error(error);
-              this.$notify.error({
-                message: '注册失败'
-              });
+              this.$notify.error('注册失败');
             });
           }
         });

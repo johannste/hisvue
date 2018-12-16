@@ -49,11 +49,8 @@
           });
           return;
         }
-        console.log('=====api.js');
-        console.log(api);
-        // 获取所有的用户信息
-        this.$http.get(api.login).then((response) => {
-          this.user = response.body.user;
+        this.$axios.get(api.login).then(response => {
+          this.user = response.data.user;
           for (var i = 0; i < this.user.length; i++) {
             if (this.user[i].name === this.form.name && this.user[i].password === this.form.password) {
               this.form.type = this.user[i].type;
@@ -67,14 +64,10 @@
             message: this.tips,
             type: 'warning'
           });
-        }, response => {
-          this.$message({
-            message: '数据请求失败',
-            type: 'error'
-          });
+        }).catch(error => {
+          console.error(error);
         });
       },
-      // 用户名文本框回车跳到密码文本框
       nextInput () {
         document.querySelector('#psw input').focus();
       }

@@ -182,14 +182,14 @@
         this.$refs.registerForm.validate(valid => {
           if (valid) {
             this.$axios.post('http://localhost:8081/patient/registration', JSON.stringify(this.register)).then(response => {
-              this.$notify.success({
-                message: '注册成功'
-              });
+              if (response.data === true) {
+                this.$notify.success('注册成功');
+              } else {
+                this.$notify.error('注册失败');
+              }
             }).catch(error => {
               console.error(error);
-              this.$notify.error({
-                message: '注册失败'
-              });
+              this.$notify.error('注册失败');
             });
           }
         });
@@ -199,8 +199,8 @@
         this.departmentvalue = '';
       },
       compute_registerNumber () {
-        this.$axios.post('http://localhost:8081/patient/getLastSerialNumber?bizCode=00').then(response => {
-          this.register.registerNumber = response.bodyText;
+        this.$axios.post('http://localhost:8081/patient/getLastSerialNumber', JSON.stringify({'bizCode': '00'})).then(response => {
+          this.register.registerNumber = response.data[0];
         }).catch(error => {
           console.error(error);
         });

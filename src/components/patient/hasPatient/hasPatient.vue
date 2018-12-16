@@ -1,9 +1,9 @@
 <template>
   <div class="hasPatient">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="搜索关键字" style="width:195px;"></el-input>
+      <el-input v-model="listQuery.title" placeholder="搜索关键字" style="width:150px;"></el-input>
       <el-select v-model="listQuery.select" placeholder="搜索类型" style="width:150px;">
-        <el-option label="名字" value="1"></el-option>
+        <el-option label="姓名" value="1"></el-option>
         <el-option label="主治医生" value="2"></el-option>
         <el-option label="日期" value="3"></el-option>
       </el-select>
@@ -14,71 +14,69 @@
     </div><br><br>
     <el-table :data="tableData" border style="width:100%;" @selection-change="handleSelectionChange">
       <el-table-column type="selection"></el-table-column>
-      <el-table-column align="center" label='序号'>
-        <template slot-scope="scope">
-          {{scope.$index}}
-        </template>
-      </el-table-column>
-      <el-table-column label="日期" prop="date"></el-table-column>
-      <el-table-column label="名字" prop="name"></el-table-column>
-      <el-table-column label="性别" prop="sex"></el-table-column>
-      <el-table-column label="年龄" prop="age"></el-table-column>
-      <el-table-column label="主治医生" prop="doctor"></el-table-column>
+      <el-table-column sortable label='序号' prop="序号"></el-table-column>
+      <el-table-column label="姓名" prop="姓名"></el-table-column>
+      <el-table-column label="性别" prop="性别"></el-table-column>
+      <el-table-column label="年龄" prop="年龄"></el-table-column>
+      <el-table-column sortable label="注册时间" prop="注册时间" :formatter="formatterController"></el-table-column>
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="建档日期">
-              <span>{{ props.row.date }}</span>
+            <el-form-item label="姓名">
+              <span>{{ props.row.姓名 }}</span>
             </el-form-item>
-            <el-form-item label="患者姓名">
-              <span>{{ props.row.name }}</span>
+            <el-form-item label="性别">
+              <span>{{ props.row.性别 }}</span>
             </el-form-item>
-            <el-form-item label="患者来源">
-              <span>{{ props.row.region }}</span>
+            <el-form-item label="年龄">
+              <span>{{ props.row.年龄 }}</span>
             </el-form-item>
-            <el-form-item label="身份证号">
-              <span>{{ props.row.idCard }}</span>
+            <el-form-item label="省份">
+              <span>{{ props.row.省份 }}</span>
             </el-form-item>
-            <el-form-item label="患者年龄">
-              <span>{{ props.row.age }}</span>
+            <el-form-item label="城市">
+              <span>{{ props.row.城市 }}</span>
             </el-form-item>
-            <el-form-item label="联系方式">
-              <span>{{ props.row.phone }}</span>
+            <el-form-item label="详细地址">
+              <span>{{ props.row.详细地址 }}</span>
             </el-form-item>
-            <el-form-item label="患者性别">
-              <span>{{ props.row.sex }}</span>
+            <el-form-item label="挂号凭证">
+              <span>{{ props.row.挂号凭证 }}</span>
             </el-form-item>
-            <el-form-item label="家庭地址">
-              <span>{{ props.row.address }}</span>
+            <el-form-item label="凭证号">
+              <span>{{ props.row.凭证号 }}</span>
+            </el-form-item>
+            <el-form-item label="手机">
+              <span>{{ props.row.手机 }}</span>
             </el-form-item>
             <el-form-item label="联系人姓名">
-              <span>{{ props.row.Name }}</span>
+              <span>{{ props.row.联系人姓名 }}</span>
             </el-form-item>
-            <el-form-item label="联系人号码">
-              <span>{{ props.row.Phone }}</span>
+            <el-form-item label="联系方式">
+              <span>{{ props.row.联系方式 }}</span>
             </el-form-item>
-            <el-form-item label="患者与联系人关系">
-              <span>{{ props.row.relation }}</span>
+            <el-form-item label="与患者关系">
+              <span>{{ props.row.与患者关系 }}</span>
             </el-form-item>
-            <el-form-item label="病症">
-              <span>{{ props.row.symptoms }}</span>
+            <el-form-item label="身体状况">
+              <span>{{ props.row.身体状况 }}</span>
             </el-form-item>
             <el-form-item label="病史">
-              <span>{{ props.row.illHistory }}</span>
+              <span>{{ props.row.病史 }}</span>
             </el-form-item>
-            <el-form-item label="科室">
-              <span>{{ props.row.disease }}</span>
+            <el-form-item label="患者来源">
+              <span>{{ props.row.患者来源 }}</span>
             </el-form-item>
-            <el-form-item label="主治医生">
-              <span>{{ props.row.doctor }}</span>
+            <el-form-item label="注册时间">
+              <span>{{ formatterController('', props.row.注册时间) }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
-          <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <el-button class="btn" size="small" type="primary" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
+          <el-button class="btn" size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
      </el-table-column>
     </el-table>
@@ -102,15 +100,15 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleCreateSubmit">确 定</el-button>
+        <el-button class="btn" @click="dialogFormVisible = false">取 消</el-button>
+        <el-button class="btn" type="primary" @click="handleCreateSubmit">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 编辑表单 -->
-    <el-dialog title="编辑表单" :visible.sync="dialogFormEditVisible">
+    <el-dialog title="编辑表单" :data="tableData" :visible.sync="dialogFormEditVisible">
       <el-form class="small-space" :model="Edit" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="建档日期">
-          <el-input v-model="Edit.date"></el-input>
+        <el-form-item label="姓名">
+          <el-input v-model="Edit.name"></el-input>
         </el-form-item>
         <el-form-item label="患者姓名">
           <el-input v-model="Edit.name"></el-input>
@@ -156,8 +154,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormEditVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleEditSubmit">确 定</el-button>
+        <el-button class="btn" @click="dialogFormEditVisible = false">取 消</el-button>
+        <el-button class="btn" type="primary" @click="handleEditSubmit">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -179,36 +177,46 @@ export default {
         age: '',
         doctor: ''
       },
-      Edit: [],
-        // date: '',
-        // name: '',
-        // region: '',
-        // idCard: '',
-        // age: '',
-        // phone: '',
-        // sex: '',
-        // address: '',
-        // Name: '',
-        // Phone: '',
-        // relation: '',
-        // symptoms: '',
-        // illHistory: '',
-        // disease: '',
-        // doctor: ''
-      // },
+      Edit: {
+        name: '',
+        date: '',
+        region: '',
+        idCard: '',
+        age: '',
+        phone: '',
+        sex: '',
+        address: '',
+        Name: '',
+        Phone: '',
+        relation: '',
+        symptoms: '',
+        illHistory: '',
+        disease: '',
+        doctor: ''
+      },
       dialogFormEditVisible: false,
       dialogFormVisible: false,
       multipleSelection: []
     };
   },
   created () {
-    this.$axios.get(api.patientList).then(response => {
-      this.tableData = response.data.tableData;
+    this.$axios.get('http://localhost:8081/patient/queryAllPatient').then(response => {
+      this.tableData = response.data;
     }).catch(error => {
       console.error(error);
     });
   },
   methods: {
+    formatterController: (row, column) => {
+      let moment = require('moment');
+      let date;
+      if (row !== '' && typeof (row[column.property]) !== 'undefined') {
+        date = row[column.property];
+      } else {
+        date = column;
+      }
+      return moment(date).format('YYYY-MM-DD HH:mm:ss');
+    },
     handleSearch () {
       this.$axios.get(api.patientList, {params: {name: this.listQuery.title}}).then(response => {
         this.tableData = response.data.tableData;
@@ -247,10 +255,22 @@ export default {
       };
     },
     handleDelAll () {
-      console.log('批量删除选择的row：', this.multipleSelection);
+      console.log('批量删除选择的row：', JSON.stringify(this.multipleSelection));
     },
     handleSelectionChange (val) {
-      this.multipleSelection = val;
+      this.multipleSelection = [];
+      for (let i = 0; i < val.length; i++) {
+        this.multipleSelection.push(val[i].序号);
+      }
+      this.$axios.get('').then(response => {
+        if (response.data === 'true') {
+          this.$notify.success('删除成功');
+        } else {
+          this.$notify.error('删除失败');
+        }
+      }).catch(error => {
+        console.log(error);
+      });
     },
     handleDownload () {
       require.ensure([], () => {
@@ -269,17 +289,17 @@ export default {
 };
 
 </script>
+
 <style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
-.hasPatient .demo-table-expand
+  .hasPatient .demo-table-expand
     font-size: 0
 
- .hasPatient .demo-table-expand label
+  .hasPatient .demo-table-expand label
     width: 90px
     color: #99a9bf
 
- .hasPatient .demo-table-expand .el-form-item
+  .hasPatient .demo-table-expand .el-form-item
     margin-right: 0
     margin-bottom: 0
     width: 33%
-
 </style>

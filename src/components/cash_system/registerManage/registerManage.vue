@@ -9,18 +9,18 @@
       <el-button type="primary" icon="document" @click="handleDownload">导出</el-button>
     </div>
     <el-table :data="patients" style="width: 95%; margin-left: 2%">
-      <el-table-column width="100px" prop="序号" label="序号"></el-table-column>
+      <el-table-column sortable width="100px" prop="序号" label="序号"></el-table-column>
       <el-table-column width="100px" prop="患者姓名" label="患者姓名"></el-table-column>
       <el-table-column width="100px" prop="科室" label="科室"></el-table-column>
-      <el-table-column width="120px" prop="就诊日期" label="就诊日期"></el-table-column>
-      <el-table-column width="120px" prop="就诊时间" label="就诊时间"></el-table-column>
-      <el-table-column width="215px" prop="候诊号" label="候诊号"></el-table-column>
+      <el-table-column sortable width="120px" prop="就诊日期" label="就诊日期"></el-table-column>
+      <el-table-column sortable width="120px" prop="就诊时间" label="就诊时间"></el-table-column>
+      <el-table-column sortable width="215px" prop="候诊号" label="候诊号"></el-table-column>
       <el-table-column width="100px" prop="挂号费" label="挂号费"></el-table-column>
       <el-table-column width="250px" label="操作">
         <template slot-scope="scope">
-          <el-button class="btn" @click="checkDetail(scope.$index)">查看</el-button>
-          <el-button v-if="patients[scope.$index].缴费状态==='未缴费'" type="primary" class="btn" @click="updatePay(scope.$index, patients)">缴费</el-button>
-          <el-button v-if="patients[scope.$index].挂号状态!=='有效'" type="danger" class="btn" @click="deleteDetail(scope.$index, patients)">取消</el-button>
+          <el-button size="small" class="btn" @click="checkDetail(scope.$index)">查看</el-button>
+          <el-button size="small" v-if="patients[scope.$index].缴费状态==='未缴费'" type="primary" class="btn" @click="updatePay(scope.$index, patients)">缴费</el-button>
+          <el-button size="small" v-if="patients[scope.$index].挂号状态!=='有效'" type="danger" class="btn" @click="deleteDetail(scope.$index, patients)">取消</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -96,29 +96,25 @@
       },
       updatePay (index, rows) {
         this.$axios.get('http://localhost:8081/patient/updateRegisterPayment?id=' + rows[index].序号).then(response => {
-          this.$message.success({
-            message: '缴费成功'
-          });
-          this.intendedpatients[index].缴费状态 = '已缴费';
-          this.intendedpatients[index].挂号状态 = '有效';
+          if (response.data === true) {
+            this.$message.success('缴费成功');
+            this.intendedpatients[index].缴费状态 = '已缴费';
+            this.intendedpatients[index].挂号状态 = '有效';
+          }
         }).catch(error => {
           console.error(error);
-          this.$message.error({
-            message: '缴费失败'
-          });
+          this.$message.error('缴费失败');
         });
       },
       deleteDetail (index, rows) {
         this.$axios.get('http://localhost:8081/patient/cancelRegisterStatus?id=' + rows[index].序号).then(response => {
-          this.$message.success({
-            message: '取消成功'
-          });
+          if (response.data === true) {
+            this.$message.success('取消成功');
+          }
           rows.splice(index, 1);
         }).catch(error => {
           console.error(error);
-          this.$notify.error({
-            message: '取消失败'
-          });
+          this.$notify.error('取消失败');
         });
       },
       handleDownload () {

@@ -9,7 +9,10 @@ import 'element-ui/lib/theme-default/index.css';
 import axios from 'axios';
 
 Vue.use(ElementUI);
+
 Vue.prototype.$axios = axios;
+axios.defaults.headers['content-Type'] = 'application/json;charset=utf-8';
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
