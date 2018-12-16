@@ -1,7 +1,6 @@
 <template>
   <div class="innnerApp">
     <div class="app-body">
-    <!-- 菜单开始 -->
       <div class="menu" :class="{ smallNav: isCollapse }">
         <el-menu default-active="1-4-1" class="el-menu-vertical-demo"  :collapse="isCollapse"  theme="dark">
           <el-menu-item index="1"  @click="navToggle">
@@ -18,7 +17,6 @@
             <el-menu-item-group>
               <span slot="title">护士人员信息管理</span>
               <el-menu-item index="2-1"><router-link to="addNurse">增加新护士信息</router-link></el-menu-item>
-              <!--（查询、删除、编辑）-->
               <el-menu-item index="2-2"><router-link to="hasNurse">已存在护士信息</router-link></el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="日常工作以及其他">
@@ -115,10 +113,7 @@
           </el-submenu>
         </el-menu>
       </div>
-    <!-- 菜单结束 -->
-      <!-- 内容显示区块 -->
       <div class="content" @mouseover="navColse">
-        <!-- 右侧头部区域 -->
         <v-header></v-header>
         <div class="tagcontent">
           <transition name="HISshow">
@@ -141,21 +136,17 @@
       };
     },
     methods: {
-      // 左侧导航打开、关闭切换
       navToggle () {
         this.isCollapse = !this.isCollapse;
       },
-      // 左侧导航关闭
       navColse () {
         this.isCollapse = true;
       }
     },
     created: function () {
-      // 获取用户相关信息、判断用户是否登录
       if (sessionStorage.getItem('easeHis')) {
         this.userLogin = true;
         this.type = sessionStorage.getItem('easeHisType');
-        console.log(this.type);
       } else {
         this.userLogin = false;
       }

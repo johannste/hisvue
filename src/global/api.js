@@ -6,7 +6,6 @@ let url = {
 export const api = {
   'login': url.staticPath + 'static/userLogin.json',
   'home': url.staticPath + 'static/home.json',
-  'patientList': url.staticPath + 'static/patientList.json',
   'complaintPatient': url.staticPath + 'static/doctor/complaintPatient.json',
   'shiftList': url.staticPath + 'static/doctor/shiftList.json',
   'staffFlow': url.staticPath + 'static/doctor/staffFlow.json',
@@ -23,6 +22,5 @@ export const api = {
   'drugs': url.staticPath + 'static/drugs.json',
   'registered': url.staticPath + 'static/doctor/registered.json',
   'trashy': url.staticPath + 'static/trashy.json',
-  'provinces': url.staticPath + 'static/provinces.json',
-  'patientList1': url.staticPath + 'static/patientList1.json'
+  'provinces': url.staticPath + 'static/provinces.json'
 };

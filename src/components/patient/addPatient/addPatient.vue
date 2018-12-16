@@ -167,17 +167,17 @@
       };
     },
     mounted () {
-      this.$http.get(api.provinces).then(response => {
+      this.$axios.get(api.provinces).then(response => {
         this.provinces = response.data.provinces;
       }, response => {
         console.error('省市请求失败');
       });
-      this.$http.get('http://localhost:8081/patient/queryRegion').then(response => {
+      this.$axios.get('http://localhost:8081/patient/queryRegion').then(response => {
         this.regions = response.data;
       }, response => {
         console.error('患者来源请求失败');
       });
-      this.$http.get('http://localhost:8081/patient/queryRelationship').then(response => {
+      this.$axios.get('http://localhost:8081/patient/queryRelationship').then(response => {
         this.relations = response.data;
       }, response => {
         console.error('与患者关系请求失败');
@@ -187,7 +187,7 @@
       onSubmit () {
         this.$refs.ruleForm.validate(valid => {
           if (valid) {
-            this.$http.post('http://localhost:8081/patient/registerPatient', JSON.stringify(this.ruleForm)).then(response => {
+            this.$axios.post('http://localhost:8081/patient/registerPatient', JSON.stringify(this.ruleForm)).then(response => {
               this.$notify.success({
                 message: '注册成功'
               });

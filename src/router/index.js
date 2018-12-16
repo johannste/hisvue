@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import VueResource from 'vue-resource';
 
 // 菜单组件
 import internal from '@/components/internal/internal';
@@ -61,7 +60,6 @@ import staffIntroduction from '@/components/introduction/staffIntroduction/staff
 import patientCount from '@/components/introduction/patientCount/patientCount';
 import patientFeedback from '@/components/introduction/patientFeedback/patientFeedback';
 Vue.use(Router);
-Vue.use(VueResource);
 
 export default new Router({
   routes: [

@@ -56,7 +56,7 @@
       };
     },
     mounted () {
-      this.$http.get('http://localhost:8081/patient/queryRegisterList').then(response => {
+      this.$axios.get('http://localhost:8081/patient/queryRegisterList').then(response => {
         this.intendedpatients = response.data;
         this.patients = this.intendedpatients;
       }, response => {
@@ -95,7 +95,7 @@
         this.patientsdetails = this.patients[index];
       },
       updatePay (index, rows) {
-        this.$http.get('http://localhost:8081/patient/updateRegisterPayment?id=' + rows[index].序号).then(response => {
+        this.$axios.get('http://localhost:8081/patient/updateRegisterPayment?id=' + rows[index].序号).then(response => {
           this.$message.success({
             message: '缴费成功'
           });
@@ -108,7 +108,7 @@
         });
       },
       deleteDetail (index, rows) {
-        this.$http.get('http://localhost:8081/patient/cancelRegisterStatus?id=' + rows[index].序号).then(response => {
+        this.$axios.get('http://localhost:8081/patient/cancelRegisterStatus?id=' + rows[index].序号).then(response => {
           this.$message.success({
             message: '取消成功'
           });
