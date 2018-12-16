@@ -59,8 +59,8 @@
       this.$axios.get('http://localhost:8081/patient/queryRegisterList').then(response => {
         this.intendedpatients = response.data;
         this.patients = this.intendedpatients;
-      }, response => {
-        console.error('数据请求失败');
+      }).catch(error => {
+        console.error(error);
       });
     },
     methods: {
@@ -101,7 +101,8 @@
           });
           this.intendedpatients[index].缴费状态 = '已缴费';
           this.intendedpatients[index].挂号状态 = '有效';
-        }, response => {
+        }).catch(error => {
+          console.error(error);
           this.$message.error({
             message: '缴费失败'
           });
@@ -113,8 +114,9 @@
             message: '取消成功'
           });
           rows.splice(index, 1);
-        }, response => {
-          this.$message.error({
+        }).catch(error => {
+          console.error(error);
+          this.$notify.error({
             message: '取消失败'
           });
         });

@@ -169,18 +169,18 @@
     mounted () {
       this.$axios.get(api.provinces).then(response => {
         this.provinces = response.data.provinces;
-      }, response => {
-        console.error('省市请求失败');
+      }).catch(error => {
+        console.error(error);
       });
       this.$axios.get('http://localhost:8081/patient/queryRegion').then(response => {
         this.regions = response.data;
-      }, response => {
-        console.error('患者来源请求失败');
+      }).catch(error => {
+        console.error(error);
       });
       this.$axios.get('http://localhost:8081/patient/queryRelationship').then(response => {
         this.relations = response.data;
-      }, response => {
-        console.error('与患者关系请求失败');
+      }).catch(error => {
+        console.error(error);
       });
     },
     methods: {
@@ -191,7 +191,8 @@
               this.$notify.success({
                 message: '注册成功'
               });
-            }, response => {
+            }).catch(error => {
+              console.error(error);
               this.$notify.error({
                 message: '注册失败'
               });

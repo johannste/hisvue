@@ -93,8 +93,8 @@
                 callback(new Error());
                 this.dialogVisible = true;
               }
-            }, response => {
-              console.error('数据请求失败');
+            }).catch(error => {
+              console.error(error);
             });
           }
           break;
@@ -160,18 +160,18 @@
       this.register.registerNumber = this.compute_registerNumber();
       this.$axios.get('http://localhost:8081/dept/all').then(response => {
         this.department = response.data;
-      }, response => {
-        console.error('科室获取失败');
+      }).catch(error => {
+        console.error(error);
       });
       this.$axios.get('http://localhost:8081/patient/queryIdentifyType').then(response => {
         this.identifyType = response.data;
-      }, response => {
-        console.error('办理凭证获取失败');
+      }).catch(error => {
+        console.error(error);
       });
       this.$axios.get('http://localhost:8081/patient/queryDiagnoseTimeRange').then(response => {
         this.timeRange = response.data;
-      }, response => {
-        console.error('就诊时段获取失败');
+      }).catch(error => {
+        console.error(error);
       });
     },
     methods: {
@@ -185,7 +185,8 @@
               this.$notify.success({
                 message: '注册成功'
               });
-            }, response => {
+            }).catch(error => {
+              console.error(error);
               this.$notify.error({
                 message: '注册失败'
               });
@@ -200,6 +201,8 @@
       compute_registerNumber () {
         this.$axios.post('http://localhost:8081/patient/getLastSerialNumber?bizCode=00').then(response => {
           this.register.registerNumber = response.bodyText;
+        }).catch(error => {
+          console.error(error);
         });
       },
       toRegistry () {
@@ -215,10 +218,8 @@
           for (let i = 0; i < response.data.length; i++) {
             this.doctor.push(response.data[i]);
           }
-        }, response => {
-          this.$notify.error({
-            message: '数据请求失败'
-          });
+        }).catch(error => {
+          console.error(error);
         });
       },
       doctorValue: function () {
