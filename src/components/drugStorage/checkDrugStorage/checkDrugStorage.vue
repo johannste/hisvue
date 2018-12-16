@@ -82,12 +82,12 @@
     },
     created () {
       // 获取药品信息
-      this.$http.get(api.storage).then((response) => {             // mark
-        this.drug = response.body.drug;
+      this.$axios.get(api.storage).then((response) => {
+        this.drug = response.data.drug;
         // 信息总条数
-        this.totalInformation = response.body.total;
-      }, response => {
-        this.$message.error('数据请求失败');
+        this.totalInformation = response.data.total;
+      }).catch(error => {
+        console.error(error);
       });
     },
     methods: {
@@ -96,10 +96,10 @@
           message: '传给后台的信息是用户输入数据 ' + this.selectInformation,
           type: 'success'
         });
-        this.$http.get(api.storage, {params: {selectInformation: this.selectInformation}}).then(function (response) {
-          this.selectArr = response.body.drug;
-        }, function () {
-          this.$message.error('后台接口有误,修改后台接口既可！');
+        this.$axios.get(api.storage, {params: {selectInformation: this.selectInformation}}).then(response => {
+          this.selectArr = response.data.drug;
+        }).catch(error => {
+          console.error(error);
         });
       },
       handleSizeChange (val) {
@@ -113,12 +113,11 @@
           message: '传给后台的信息是选择的页码、显示条数以及当前显示的位置的id ' + showindex,
           type: 'success'
         });
-        this.$http.get(api.storage, {params: {showindex: showindex}}).then(function (response) {
-          this.drug = response.body.drug;
-          // 信息总条数
-          this.totalInformation = response.body.total;
-        }, function () {
-//          this.$message.error('后台接口有误,修改后台接口既可！');
+        this.$axios.get(api.storage, {params: {showindex: showindex}}).then(response => {
+          this.drug = response.data.drug;
+          this.totalInformation = response.data.total;
+        }).catch(error => {
+          console.error(error);
         });
       }
     }

@@ -33,10 +33,10 @@
       };
     },
     created () {
-      this.$http.get(api.home).then((response) => {             // mark
-        this.home = response.body.home;
-      }, response => {
-        this.$message.error('数据请求失败');
+      this.$axios.get(api.home).then((response) => {
+        this.home = response.data.home;
+      }).catch(error => {
+        console.error(error);
       });
     }
   };

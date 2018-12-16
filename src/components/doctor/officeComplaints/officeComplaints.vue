@@ -84,10 +84,8 @@
             .catch(_ => {});
         },
         lookforPatient (index) {
-          // console.log(index, row);
           this.dialogFormVisible = true;
           this.Index = index;
-          // console.log('患者姓名', this.complaintPatientList[this.Index].name);
           for (let i = 0; i < this.patientList.length; i++) {
             if (this.complaintPatientList[this.Index].name === this.patientList[i].name) {
               this.messages = this.patientList[i];
@@ -117,45 +115,43 @@
         }
       },
       created () {
-        this.$http.get(api.complaintPatient).then((response) => {             // mark
-          this.complaintList = response.body.complaintList;
-          this.complaintPatientList = response.body.complaintPatientList;
-        }, response => {
-          // error callback
-          alert('1数据请求失败');
+        this.$axios.get(api.complaintPatient).then(response => {
+          this.complaintList = response.data.complaintList;
+          this.complaintPatientList = response.data.complaintPatientList;
+        }).catch(error => {
+          console.error(error);
         });
-        this.$http.get(api.registered).then((response) => {             // mark
-          this.patientList = response.body.tableData;
-        }, response => {
-          // error callback
-          alert('2数据请求失败');
+        this.$axios.get(api.registered).then(response => {
+          this.patientList = response.data.tableData;
+        }).catch(error => {
+          console.error(error);
         });
       }
     };
 </script>
 
 <style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
-.patientMessage li
-  font-size:20px
-.patientMessage h3
-  width:150px
-  line-height:40px
-  display:inline-block
-  margin-left:30px
-  margin-right:50px
-.patientMessage span
-  color:#999
-.importants h1
-  font-size:22px
-  margin:0 0 20px 0
-.importants h2
-  font-size:18px
-  margin:10px 0 30px 0
-.importants h3
-  color:red
-  font-size:14px
-  padding:0 0 10px 40px
-.importants li
-  margin-left:30px
-  margin-bottom:20px
+  .patientMessage li
+    font-size:20px
+  .patientMessage h3
+    width:150px
+    line-height:40px
+    display:inline-block
+    margin-left:30px
+    margin-right:50px
+  .patientMessage span
+    color:#999
+  .importants h1
+    font-size:22px
+    margin:0 0 20px 0
+  .importants h2
+    font-size:18px
+    margin:10px 0 30px 0
+  .importants h3
+    color:red
+    font-size:14px
+    padding:0 0 10px 40px
+  .importants li
+    margin-left:30px
+    margin-bottom:20px
 </style>

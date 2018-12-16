@@ -81,59 +81,38 @@
       };
     },
     mounted () {
-      let prescriptionCThis = this;
-
-      prescriptionCThis.$http.get(api.patientList).then((response) => {
-        // 测试语句，测试是否能获取response
-        // console.log(prescriptionCThis.prescriptionC, response);
-        // 把json接口获取的数据赋给当前对象
-        prescriptionCThis.prescriptionC = response.data.tableData;
-        prescriptionCThis.intendedprescription = response.data.tableData;
-      }, response => {
-        // error callback
-        prescriptionCThis.$notify.error({
-          message: '数据请求失败'
-        });
+      this.$axios.get(api.patientList).then(response => {
+        this.prescriptionC = response.data.tableData;
+        this.intendedprescription = response.data.tableData;
+      }).catch(error => {
+        console.error(error);
       });
-      prescriptionCThis.$http.get(api.drugs).then((response) => {
-        // 把json接口获取的数据赋给当前对象
-        prescriptionCThis.drugs = response.data.tableDataC;
-      }, response => {
-        // error callback
-        prescriptionCThis.$notify.error({
-          message: '数据请求失败'
-        });
+      this.$axios.get(api.drugs).then(response => {
+        this.drugs = response.data.tableDataC;
+      }).catch(error => {
+        console.error(error);
       });
     },
     methods: {
       // 搜索
       search () {
-        let search = this;
-        search.$http.get(api.patientList, {params: {number: search.searchNumber, name: search.searchName}}).then((response) => {
-          // 把数组置空，以便存放搜索到的符合条件的数据
-          search.prescriptionC = [];
-          // 遍历后台数据是否有和传入的参数相同的，有的话就找出来push进prescriptionC[]
+        this.$axios.get(api.patientList, {params: {number: this.searchNumber, name: this.searchName}}).then(response => {
+          this.prescriptionC = [];
           for (let i = 0; i < response.data.tableData.length; i++) {
-            // 两个条件都有输入值的时候，判断是否有同时符合这两个条件的数据
-            if (search.searchNumber && search.searchName) {
-              if (response.data.tableData[i].number === search.searchNumber && response.data.tableData[i].name === search.searchName) {
-                search.prescriptionC.push(response.data.tableData[i]);
+            if (this.searchNumber && this.searchName) {
+              if (response.data.tableData[i].number === this.searchNumber && response.data.tableData[i].name === this.searchName) {
+                this.prescriptionC.push(response.data.tableData[i]);
               }
             } else {
-              if (search.searchNumber && response.data.tableData[i].number === search.searchNumber) {
-                // 只有第一个输入值的时候
-                search.prescriptionC.push(response.data.tableData[i]);
-              } else if (search.searchName && response.data.tableData[i].name === search.searchName) {
-                // 只有第二个输入值的时候
-                search.prescriptionC.push(response.data.tableData[i]);
+              if (this.searchNumber && response.data.tableData[i].number === this.searchNumber) {
+                this.prescriptionC.push(response.data.tableData[i]);
+              } else if (this.searchName && response.data.tableData[i].name === this.searchName) {
+                this.prescriptionC.push(response.data.tableData[i]);
               }
             }
           }
-        }, (response) => {
-          // error callback
-          search.$notify.error({
-            message: '数据请求失败'
-          });
+        }).catch(error => {
+          console.error(error);
         });
       },
       // 显示全部数据
@@ -165,7 +144,7 @@
             if (this.drugs[i].drugname === this.prescriptionC[index].prescription.drug[j].drugname) {
               this.drugs[i].quantity = this.drugs[i].quantity - this.prescriptionC[index].prescription.drug[j].quantity;
               // 提交数据到后台（暂时没有后台接口），后台用接收到的修改过的库存的值替换掉原来的库存值，所有应用到该库存的地方都会发生相应的修改
-              // this.$http.post('', {drugs: 'this.drugs'}).then(response => {}, response => {});
+              // this.$axios.post('', {drugs: 'this.drugs'}).then(response => {}, response => {});
               // 这里没有后台接口，无法把修改后的药品库存返回去，这里用打印到控制台的方式查看结果
               console.log(this.drugs[i].quantity);
             };

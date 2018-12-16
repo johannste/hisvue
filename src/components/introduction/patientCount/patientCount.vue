@@ -1,7 +1,7 @@
 <template>
   <div class="patientCount">
     <div class="title">
-      <p>安逸医院患者数量周统计表</p>
+      <p>医院患者数量周统计表</p>
     </div>
 
     <div class="tableCount">
@@ -115,26 +115,18 @@
         });
         return sums;
       }
-      // amount () {
-      //   alert(this.personSum);
-      // }
     },
     created () {
-      this.$http.get(api.patientCount).then((response) => {             // mark
-        this.table1 = response.body.table1;
-        this.table2 = response.body.table2;
-        this.table3 = response.body.table3;
-        this.table4 = response.body.table4;
-        this.table5 = response.body.table5;
-        this.table6 = response.body.table6;
-        this.table7 = response.body.table7;
-        // console.log(this.table1);
-      }, response => {
-        // error callback
-        this.$message({
-          message: '数据请求失败',
-          type: 'error'
-        });
+      this.$axios.get(api.patientCount).then(response => {
+        this.table1 = response.data.table1;
+        this.table2 = response.data.table2;
+        this.table3 = response.data.table3;
+        this.table4 = response.data.table4;
+        this.table5 = response.data.table5;
+        this.table6 = response.data.table6;
+        this.table7 = response.data.table7;
+      }).catch(error => {
+        console.error(error);
       });
     }
   };

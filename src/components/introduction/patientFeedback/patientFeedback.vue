@@ -1,6 +1,6 @@
 <template>
   <div class="patientFeedback">
-    <span class="title">安逸医院患者满意度调查表</span>
+    <span class="title">医院患者满意度调查表</span>
     <div class="form">
       <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="调查日期" required>

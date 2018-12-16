@@ -66,51 +66,34 @@
       };
     },
     mounted () {
-      let druginfosThis = this;
-
-      druginfosThis.$http.get(api.drugs).then((response) => {
-        // 测试语句，测试是否能获取response
-        // console.log(druginfosThis.tableData, response);
-        // 把json接口获取的数据赋给当前对象
-        druginfosThis.tableData = response.data.tableDataC;
-        druginfosThis.assistanttableData = response.data.tableDataC;
-      }, response => {
-        // error callback
-        druginfosThis.$notify.error({
-          message: '数据请求失败'
-        });
+      this.$axios.get(api.drugs).then(response => {
+        this.tableData = response.data.tableDataC;
+        this.assistanttableData = response.data.tableDataC;
+      }).catch(error => {
+        console.error(error);
       });
     },
     methods: {
-      // 确认是否要关闭dialog
       handleClose (done) {
         this.$confirm('确认关闭？').then(_ => {
           done();
         }).catch(_ => {});
       },
-      // 查看药品详情参数
       checkDetail (index) {
-        // console.log(index);
         this.dialogVisible = true;
         this.drugdetails = this.tableData[index];
       },
       // 搜索
       search () {
-        let intendedSearch = this;
-        intendedSearch.$http.get(api.drugs, {params: {drugname: intendedSearch.searchValue}}).then((response) => {
-          // 遍历接口里的所有信息，查找drugname为搜索框里输入的内容的数据，然后把所有找到的数据push进this.tableData里
-          // 在把查找到的数据存进this.tableData里之前，需要把它置为空
-          intendedSearch.tableData = [];
+        this.$axios.get(api.drugs, {params: {drugname: this.searchValue}}).then((response) => {
+          this.tableData = [];
           for (let i = 0; i < response.data.tableDataC.length; i++) {
-            if (response.data.tableDataC[i].drugname === intendedSearch.searchValue) {
-              intendedSearch.tableData.push(response.data.tableDataC[i]);
+            if (response.data.tableDataC[i].drugname === this.searchValue) {
+              this.tableData.push(response.data.tableDataC[i]);
             }
           };
-        }, response => {
-          // error callback
-          intendedSearch.$notify.error({
-            message: '数据请求失败'
-          });
+        }).catch(error => {
+          console.error(error);
         });
       },
       // 显示全部数据

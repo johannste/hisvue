@@ -197,15 +197,11 @@
       }
     },
     created () {
-      this.$http.get(api.turnOver).then((response) => {             // mark
-        this.table = response.body.table;
+      this.$axios.get(api.turnOver).then((response) => {             // mark
+        this.table = response.data.table;
         console.log(this.table);
-      }, response => {
-        // error callback
-        this.$message({
-          message: '数据请求失败',
-          type: 'error'
-        });
+      }).catch(error => {
+        console.error(error);
       });
     }
   };

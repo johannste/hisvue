@@ -281,16 +281,12 @@
       }
     },
     created () {
-      this.$http.get(api.table_shift).then((response) => {             // mark
-        this.table = response.body.table;
-        this.searchList = response.body.table;
+      this.$axios.get(api.table_shift).then((response) => {             // mark
+        this.table = response.data.table;
+        this.searchList = response.data.table;
         console.log(this.table);
-      }, response => {
-        // error callback
-        this.$message({
-          message: '数据请求失败',
-          type: 'error'
-        });
+      }).catch(error => {
+        console.error(error);
       });
     }
   };

@@ -77,12 +77,11 @@
     },
     created () {
       // 获取所有浪费药品的信息
-      this.$http.get(api.trashy).then((response) => {             // mark
-        this.trashyDrug = response.body.trashyDrug;
+      this.$axios.get(api.trashy).then(response => {             // mark
+        this.trashyDrug = response.data.trashyDrug;
         console.log(this.trashyDrug);
-      }, response => {
-        // error callback
-        this.$message('数据请求失败');
+      }).catch(error => {
+        console.error(error);
       });
     },
     methods: {
@@ -100,10 +99,10 @@
           message: '传给后台的信息是消息的id' + this.trashyDrug[index].id,
           type: 'success'
         });
-        this.$http.get(api.storage, {params: {id: this.trashyDrug[index].id}}).then(function (response) {
+        this.$axios.get(api.storage, {params: {id: this.trashyDrug[index].id}}).then(response => {
           this.trashyDrug.splice(index, 1);
-        }, function () {
-          this.$message.error('后台接口有误,修改后台接口既可！');
+        }).catch(error => {
+          console.error(error);
         });
       },
       // 删除所有信息
@@ -111,24 +110,24 @@
         this.tipsVisible = false;
         if (toDelete) {
           this.$message('删除所有');
-          this.$http.get(api.trashy).then(function (response) {
+          this.$axios.get(api.trashy).then(response => {
             this.trashyDrug = [];
-          }, function () {
-            this.$message.error('后台接口有误,修改后台接口既可！');
+          }).catch(error => {
+            console.error(error);
           });
         }
       },
       // 发送用户编辑后信息
       toEditTrashy () {
-        this.$http.get(api.trashy, {params: {form: this.editForm}}).then(function (response) {
+        this.$axios.get(api.trashy, {params: {form: this.editForm}}).then(response => {
           this.$message({
             message: '编辑消耗药品信息成功',
             type: 'success'
           });
           this.trashyDrug[this.editIndex] = this.editForm;
           this.dialogFormVisible = false;
-        }, function () {
-          this.$message.error('后台接口有误,修改后台接口既可！');
+        }).catch(error => {
+          console.error(error);
         });
       }
     }

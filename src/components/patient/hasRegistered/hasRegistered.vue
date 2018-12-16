@@ -23,7 +23,6 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import Vue from 'vue';
 import {api} from '../../../global/api.js';
 export default {
   data () {
@@ -36,25 +35,18 @@ export default {
     };
   },
   created () {
-    let me = this;
-    Vue.http.get(api.patientList).then(function (response) {
-      console.log(response);
-      console.log('这是我们需要的数据:', response.tableData);
-      me.tableData = response.data.tableData;
-    }, function (response) {
-      alert('请求失败了');
+    this.$axios.get(api.patientList).then(response => {
+      this.tableData = response.data.tableData;
+    }).catch(error => {
+      console.error(error);
     });
   },
   methods: {
     handleSearch () {
-      let me = this;
-      Vue.http.get(api.patientList1, {params: this.listQuery}).then(function (response) {
-        console.log(response);
-        console.log('这是我们需要的json数据', response.tableData);
-        // me.tableData = response.data.tableData;
-        me.tableData = response.data.tableData;
-      }, function (response) {
-        alert('请求失败了');
+      this.$axios.get(api.patientList, {params: this.listQuery}).then(response => {
+        this.tableData = response.data.tableData;
+      }).catch(error => {
+        console.error(error);
       });
     }
   }

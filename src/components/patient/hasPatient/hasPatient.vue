@@ -164,7 +164,6 @@
 </template>
 <script type="text/ecmascript-6">
 import {api} from '../../../global/api.js';
-import Vue from 'vue';
 export default {
   data () {
     return {
@@ -203,53 +202,41 @@ export default {
     };
   },
   created () {
-    let vm = this;
-    Vue.http.get(api.patientList).then(function (response) {
-      console.log(response);
-      console.log('这是我们需要的json数据', response.tableData);
-      // me.tableData = response.data.tableData;
-      vm.tableData = response.data.tableData;
-    }, function (response) {
-      alert('请求失败了');
+    this.$axios.get(api.patientList).then(response => {
+      this.tableData = response.data.tableData;
+    }).catch(error => {
+      console.error(error);
     });
   },
   methods: {
     handleSearch () {
-      let me = this;
-      me.$http.get(api.patientList1, {params: {name: me.listQuery.title}}).then(function (response) {
-        // console.log(response);
-        console.log('这是我们需要的json数据', response.data.tableData);
-        // me.tableData = response.data.tableData;
-        me.tableData = response.data.tableData;
-        console.log(response.data.tableData);
-      }, function (response) {
-        alert('请求失败了');
+      this.$axios.get(api.patientList, {params: {name: this.listQuery.title}}).then(response => {
+        this.tableData = response.data.tableData;
+      }).catch(error => {
+        console.error(error);
       });
     },
     handleEdit (index, row) {
       this.dialogFormEditVisible = true;
-      console.log('选择的条数：', index, '选择row属性：', row);
       this.Edit = row;// 浅拷贝
-      // this.Edit = JSON.parse(JSON.stringify(row));
       // 深度拷贝
+      // this.Edit = JSON.parse(JSON.stringify(row));
     },
     handleEditSubmit () {
       this.Edit;
       this.dialogFormEditVisible = false;
     },
     handleDelete (index, row) {
-      var vm = this;
       console.log('单个删除选择的row：', index, '-----', row);
-      vm.tableData.splice(index, 1);
+      this.tableData.splice(index, 1);
     },
     handleCreate () {
       this.dialogFormVisible = true;
     },
     handleCreateSubmit () {
-      var vm = this;
-      console.log('新增入参：', vm.temp);
-      vm.tableData
-      .push(vm.temp);
+      console.log('新增入参：', this.temp);
+      this.tableData
+      .push(this.temp);
       this.dialogFormVisible = false;
       this.temp = {
         date: '',
@@ -260,20 +247,18 @@ export default {
       };
     },
     handleDelAll () {
-      var vm = this;
-      console.log('批量删除选择的row：', vm.multipleSelection);
+      console.log('批量删除选择的row：', this.multipleSelection);
     },
     handleSelectionChange (val) {
       this.multipleSelection = val;
     },
     handleDownload () {
-      var vm = this;
       require.ensure([], () => {
         const { export_json_to_excel } = require('vendor/Export2Excel');
         const tHeader = ['日期', '名字', '性别', '地址', '联系号码', '年龄', '主治医生'];
         const filterVal = ['date', 'name', 'sex', 'address', 'phone', 'age', 'doctor'];
-        const tableData = vm.tableData;
-        const data = vm.formatJson(filterVal, tableData);
+        const tableData = this.tableData;
+        const data = this.formatJson(filterVal, tableData);
         export_json_to_excel(tHeader, data, '导出的列表excel');
       });
     },

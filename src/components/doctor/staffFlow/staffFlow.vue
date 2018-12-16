@@ -150,15 +150,11 @@
         }
       },
       created () {
-        this.$http.get(api.staffFlow).then((response) => {
+        this.$axios.get(api.staffFlow).then((response) => {
           // mark
-          this.staffFlowlist = response.body.staffFlowlist;
-        }, response => {
-          // error callback
-          this.$message({
-            message: '数据请求失败',
-            type: 'error'
-          });
+          this.staffFlowlist = response.data.staffFlowlist;
+        }).catch(error => {
+          console.error(error);
         });
       }
     };

@@ -126,22 +126,16 @@
         // 导出信息表
         // 搜索
         search () {
-          let intendedSearch = this;
-          intendedSearch.$http.get(api.doctor, {params: {name: intendedSearch.searchName}}).then((response) => {
-              // 遍历接口里的所有信息，查找drugname为搜索框里输入的内容的数据，然后把所有找到的数据push进this.tableData里
-              // 在把查找到的数据存进this.tableData里之前，需要把它置为空
-            intendedSearch.doctorlist = [];
+          this.$http.get(api.doctor, {params: {name: this.searchName}}).then(response => {
+            this.doctorlist = [];
             for (let i = 0; i < response.data.doctorlist.length; i++) {
-              if (response.data.doctorlist[i].name === intendedSearch.searchName) {
-                intendedSearch.doctorlist.push(response.data.doctorlist[i]);
+              if (response.data.doctorlist[i].name === this.searchName) {
+                this.doctorlist.push(response.data.doctorlist[i]);
               }
             };
-            console.log(intendedSearch.searchList);
-          }, response => {
-            // error callback
-            intendedSearch.$notify.error({
-              message: '数据请求失败'
-            });
+            console.log(this.searchList);
+          }).catch(error => {
+            console.error(error);
           });
         },
         // 搜索
@@ -173,7 +167,7 @@
           let dateFormat = year + '-' + month + '-' + day;
           // console.log(this.doctorlistedit);
           this.doctorlistedit.date = dateFormat;
-          // this.$http.get(api.doctor, this.doctorlistedit).then(function () {
+          // this.$axios.get(api.doctor, this.doctorlistedit).then(function () {
           this.doctorlist[this.Index] = this.doctorlistedit;
           // this.doctorlist[this.Index].date = dateFormat;
           this.$message({
@@ -193,15 +187,11 @@
         }
       },
       created () {
-        this.$http.get(api.doctor).then((response) => {             // mark
-          this.doctorlist = response.body.doctorlist;
-          this.searchList = response.body.doctorlist;
-        }, response => {
-          // error callback
-          this.$message({
-            message: '数据请求失败',
-            type: 'error'
-          });
+        this.$axios.get(api.doctor).then(response => {
+          this.doctorlist = response.data.doctorlist;
+          this.searchList = response.data.doctorlist;
+        }).catch(error => {
+          console.error(error);
         });
       }
     };

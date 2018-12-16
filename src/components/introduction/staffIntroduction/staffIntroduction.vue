@@ -12,7 +12,7 @@
         <div class="table">
            <el-table ref="multipleTable" :data="table" border tooltip-effect="dark"  style="width: 100%">
               <el-table-column type="expand">
-                <template slot-slot-slot-scope="props">
+                <template slot-scope="scope">
                   <el-form label-position="left" inline class="demo-table-expand">
                     <el-form-item label="详细信息:">
                       <span>{{ props.row.message }}</span>
@@ -21,7 +21,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="序号" width="50" >
-                <template slot-slot-scope="scope">{{ scope.$index }}</template>
+                <template slot-scope="scope">{{ scope.$index }}</template>
               </el-table-column>
               <el-table-column prop="name" label="医师姓名"  width="120" ></el-table-column>
               <el-table-column prop="sex" label="性别" show-overflow-tooltip width="70"></el-table-column>
@@ -31,7 +31,7 @@
                <el-table-column prop="area" label="地点" show-overflow-tooltip></el-table-column>
               <el-table-column prop="special" label="特长" show-overflow-tooltip></el-table-column>
               <el-table-column align="center" label="电话预约">
-                <template slot-slot-scope="scope">
+                <template slot-scope="scope">
                   <img src="../logo/phone.icon.jpg" width="20" height="20">
                   <el-button size="small" @click="handleOrder(scope.$index)">电话预约</el-button>
                 </template>
@@ -50,7 +50,7 @@
          <div class="table2">
            <el-table ref="multipleTable" :data="table2" border tooltip-effect="dark"  style="width: 100%">
               <el-table-column type="expand">
-                <template slot-slot-scope="props">
+                <template slot-scope="props">
                   <el-form label-position="left" inline class="demo-table-expand">
                     <el-form-item label="详细信息:">
                       <span>{{ props.row.message }}</span>
@@ -59,7 +59,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="序号" width="50" >
-                <template slot-slot-scope="scope">{{ scope.$index }}</template>
+                <template slot-scope="scope">{{ scope.$index }}</template>
               </el-table-column>
               <el-table-column prop="name" label="护士姓名"  width="120" ></el-table-column>
               <el-table-column prop="sex" label="性别" show-overflow-tooltip width="70"></el-table-column>
@@ -69,7 +69,7 @@
                <el-table-column prop="area" label="地点" show-overflow-tooltip></el-table-column>
               <el-table-column prop="special" label="特长" show-overflow-tooltip></el-table-column>
               <el-table-column align="center" label="电话预约">
-                <template slot-slot-scope="scope">
+                <template slot-scope="scope">
                   <img src="../logo/phone.icon.jpg" width="20" height="20">
                   <el-button size="small" @click="handleOrder(scope.$index)">电话预约</el-button>
                 </template>
@@ -110,18 +110,12 @@
       }
     },
     created () {
-      this.$http.get(api.staffIntroduction).then((response) => {             // mark
-        this.table = response.body.table;
-        this.table2 = response.body.table2;
-        this.message = response.body.message;
-        console.log(this.table);
-        console.log(this.table2);
-      }, response => {
-        // error callback
-        this.$message({
-          message: '数据请求失败',
-          type: 'error'
-        });
+      this.$axios.get(api.staffIntroduction).then(response => {
+        this.table = response.data.table;
+        this.table2 = response.data.table2;
+        this.message = response.data.message;
+      }).catch(error => {
+        console.error(error);
       });
     }
   };

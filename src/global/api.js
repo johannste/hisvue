@@ -22,5 +22,7 @@ export const api = {
   'drugs': url.staticPath + 'static/drugs.json',
   'registered': url.staticPath + 'static/doctor/registered.json',
   'trashy': url.staticPath + 'static/trashy.json',
-  'provinces': url.staticPath + 'static/provinces.json'
+  'provinces': url.staticPath + 'static/provinces.json',
+  'doctor': url.staticPath + 'static/doctor/doctor.json',
+  'patientList': url.staticPath + 'static/patientList.json'
 };

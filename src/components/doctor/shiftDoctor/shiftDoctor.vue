@@ -187,16 +187,11 @@
       },
       // 获取json数据
       created () {
-        this.$http.get(api.shiftList).then((response) => {             // mark
-          this.shiftList = response.body.shiftList;
-        }, response => {
-          // error callback
-          this.$message({
-            message: '数据请求失败',
-            type: 'error'
-          });
+        this.$axios.get(api.shiftList).then((response) => {
+          this.shiftList = response.data.shiftList;
+        }).catch(error => {
+          console.error(error);
         });
-        // this.updateDoctor();
       }
     };
 </script>
