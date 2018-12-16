@@ -84,7 +84,7 @@
           if (/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value) === false) {
             callback(new Error());
           } else {
-            this.$http.get('http://localhost:8081/patient/queryIdentify?identifyNumber=' + this.register.identifyNumber).then(response => {
+            this.$axios.get('http://localhost:8081/patient/queryIdentify?identifyNumber=' + this.register.identifyNumber).then(response => {
               if (response.data.length === 1) {
                 this.register.patientName = response.data[0].name;
                 callback();
@@ -93,8 +93,6 @@
                 callback(new Error());
                 this.dialogVisible = true;
               }
-            }, response => {
-              console.error('数据请求失败');
             });
           }
           break;
@@ -158,17 +156,17 @@
     },
     created () {
       this.register.registerNumber = this.compute_registerNumber();
-      this.$http.get('http://localhost:8081/dept/all').then(response => {
+      this.$axios.get('http://localhost:8081/dept/all').then(response => {
         this.department = response.data;
       }, response => {
         console.error('科室获取失败');
       });
-      this.$http.get('http://localhost:8081/patient/queryIdentifyType').then(response => {
+      this.$axios.get('http://localhost:8081/patient/queryIdentifyType').then(response => {
         this.identifyType = response.data;
       }, response => {
         console.error('办理凭证获取失败');
       });
-      this.$http.get('http://localhost:8081/patient/queryDiagnoseTimeRange').then(response => {
+      this.$axios.get('http://localhost:8081/patient/queryDiagnoseTimeRange').then(response => {
         this.timeRange = response.data;
       }, response => {
         console.error('就诊时段获取失败');
@@ -181,7 +179,7 @@
       submitForm (formName) {
         this.$refs.registerForm.validate(valid => {
           if (valid) {
-            this.$http.post('http://localhost:8081/patient/registration', JSON.stringify(this.register)).then(response => {
+            this.$axios.post('http://localhost:8081/patient/registration', JSON.stringify(this.register)).then(response => {
               this.$notify.success({
                 message: '注册成功'
               });
@@ -198,7 +196,7 @@
         this.departmentvalue = '';
       },
       compute_registerNumber () {
-        this.$http.post('http://localhost:8081/patient/getLastSerialNumber?bizCode=00').then(response => {
+        this.$axios.post('http://localhost:8081/patient/getLastSerialNumber?bizCode=00').then(response => {
           this.register.registerNumber = response.bodyText;
         });
       },
@@ -209,7 +207,7 @@
     watch: {
       departmentValue: function () {
         this.register.departmentId = this.departmentValue;
-        this.$http.get('http://localhost:8081/doctor/findBy?id=' + this.departmentValue).then(response => {
+        this.$axios.get('http://localhost:8081/doctor/findBy?id=' + this.departmentValue).then(response => {
           this.doctor = [];
           this.doctorValue = '';
           for (let i = 0; i < response.data.length; i++) {
