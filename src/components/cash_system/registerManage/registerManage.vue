@@ -18,25 +18,25 @@
       <el-table-column width="100px" prop="挂号费" label="挂号费"></el-table-column>
       <el-table-column width="250px" label="操作">
         <template slot-scope="scope">
-          <el-button size="small" class="btn" @click="checkDetail(scope.$index)">查看</el-button>
-          <el-button size="small" v-if="patients[scope.$index].缴费状态==='未缴费'" type="primary" class="btn" @click="updatePay(scope.$index, patients)">缴费</el-button>
+          <el-button size="small" class="btn" @click="checkDetail(scope.$index, scope.row)">查看</el-button>
+          <el-button size="small" v-if="patients[scope.$index].缴费状态==='未缴费'" type="primary" class="btn" @click="updatePay(scope.$index, scope.row)">缴费</el-button>
           <el-button size="small" v-if="patients[scope.$index].挂号状态!=='有效'" type="danger" class="btn" @click="deleteDetail(scope.$index, patients)">取消</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog title="患者挂号信息" :visible.sync="dialogVisible">
       <ul class="patients-detail">
-        <li><h5>序号：</h5><span>{{patientsdetails.序号}}</span></li>
-        <li><h5>患者姓名:</h5><span>{{patientsdetails.患者姓名}}</span></li>
-        <li><h5>挂号凭证:</h5><span>{{patientsdetails.挂号凭证}}</span></li>
-        <li><h5>科室:</h5><span>{{patientsdetails.科室}}</span></li>
-        <li><h5>就诊医生:</h5><span>{{patientsdetails.就诊医生}}</span></li>
-        <li><h5>就诊日期:</h5><span>{{patientsdetails.就诊日期}}</span></li>
-        <li><h5>就诊时间:</h5><span>{{patientsdetails.就诊时间}}</span></li>
-        <li><h5>候诊号:</h5><span>{{patientsdetails.候诊号}}</span></li>
-        <li><h5>挂号费:</h5><span>{{patientsdetails.挂号费}}</span></li>
-        <li><h5>缴费状态:</h5><span>{{patientsdetails.缴费状态}}</span></li>
-        <li><h5>挂号状态:</h5><span>{{patientsdetails.挂号状态}}</span></li>
+        <li><h5>序号：</h5><span>{{patientsDetails.序号}}</span></li>
+        <li><h5>患者姓名:</h5><span>{{patientsDetails.患者姓名}}</span></li>
+        <li><h5>挂号凭证:</h5><span>{{patientsDetails.挂号凭证}}</span></li>
+        <li><h5>科室:</h5><span>{{patientsDetails.科室}}</span></li>
+        <li><h5>就诊医生:</h5><span>{{patientsDetails.就诊医生}}</span></li>
+        <li><h5>就诊日期:</h5><span>{{patientsDetails.就诊日期}}</span></li>
+        <li><h5>就诊时间:</h5><span>{{patientsDetails.就诊时间}}</span></li>
+        <li><h5>候诊号:</h5><span>{{patientsDetails.候诊号}}</span></li>
+        <li><h5>挂号费:</h5><span>{{patientsDetails.挂号费}}</span></li>
+        <li><h5>缴费状态:</h5><span>{{patientsDetails.缴费状态}}</span></li>
+        <li><h5>挂号状态:</h5><span>{{patientsDetails.挂号状态}}</span></li>
       </ul>
     </el-dialog>
 
@@ -48,17 +48,17 @@
     data () {
       return {
         patients: [],
-        intendedpatients: [],
+        intendedPatients: [],
         dialogVisible: false,
-        patientsdetails: '',
+        patientsDetails: '',
         searchNumber: '',
         searchName: ''
       };
     },
     mounted () {
       this.$axios.get('http://localhost:8081/patient/queryRegisterList').then(response => {
-        this.intendedpatients = response.data;
-        this.patients = this.intendedpatients;
+        this.intendedPatients = response.data;
+        this.patients = this.intendedPatients;
       }).catch(error => {
         console.error(error);
       });
@@ -66,40 +66,33 @@
     methods: {
       search () {
         this.patients = [];
-        for (let i = 0; i < this.intendedpatients.length; i++) {
-          if (this.searchNumber && this.searchName) {
-            if (this.intendedpatients[i].number === this.searchNumber && this.intendedpatients[i].患者姓名 === this.searchName) {
-              this.patients.push(this.intendedpatients[i]);
-            }
-          } else {
-            if (this.searchNumber && this.intendedpatients[i].number === this.searchNumber) {
-              this.patients.push(this.intendedpatients[i]);
-            } else if (this.searchName && this.intendedpatients[i].患者姓名 === this.searchName) {
-              this.patients.push(this.intendedpatients[i]);
-            }
+        for (let i = 0; i < this.intendedPatients.length; i++) {
+          if (this.searchNumber && this.intendedPatients[i].number === this.searchNumber) {
+            this.patients.push(this.intendedPatients[i]);
+          } else if (this.searchName && this.intendedPatients[i].患者姓名 === this.searchName) {
+            this.patients.push(this.intendedPatients[i]);
           }
         }
       },
       showAll () {
-        this.patients = this.intendedpatients;
+        this.patients = this.intendedPatients;
         this.searchNumber = '';
-        this.searchNamer = '';
       },
       handleClose (done) {
         this.$confirm('确认关闭？').then(_ => {
           done();
         }).catch(_ => {});
       },
-      checkDetail (index) {
+      checkDetail (index, row) {
         this.dialogVisible = true;
-        this.patientsdetails = this.patients[index];
+        this.patientsDetails = row;
       },
       updatePay (index, rows) {
-        this.$axios.get('http://localhost:8081/patient/updateRegisterPayment?id=' + rows[index].序号).then(response => {
+        this.$axios.get('http://localhost:8081/patient/updateRegisterPayment?id=' + rows.序号).then(response => {
           if (response.data === true) {
             this.$message.success('缴费成功');
-            this.intendedpatients[index].缴费状态 = '已缴费';
-            this.intendedpatients[index].挂号状态 = '有效';
+            this.intendedPatients[index].缴费状态 = '已缴费';
+            this.intendedPatients[index].挂号状态 = '有效';
           }
         }).catch(error => {
           console.error(error);

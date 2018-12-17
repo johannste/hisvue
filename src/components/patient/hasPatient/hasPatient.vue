@@ -8,11 +8,11 @@
         <el-option label="日期" value="3"></el-option>
       </el-select>
       <el-button type="primary" icon="search" @click="handleSearch">搜索</el-button>
-      <el-button type="primary" icon="edit" @click="handleCreate">添加</el-button>
+      <el-button type="primary" icon="view" @click="showAll">显示全部</el-button>
       <el-button type="primary" icon="delete" @click="handleDelAll">批量删除</el-button>
       <el-button type="primary" @click="handleDownload"><i class="el-icon-document el-icon--left"></i>导出</el-button>
     </div><br><br>
-    <el-table :data="tableData" border style="width:100%;" @selection-change="handleSelectionChange">
+    <el-table :data="patients" style="width:100%;" @selection-change="handleSelectionChange">
       <el-table-column type="selection"></el-table-column>
       <el-table-column sortable label='序号' prop="序号"></el-table-column>
       <el-table-column label="姓名" prop="姓名"></el-table-column>
@@ -80,79 +80,36 @@
         </template>
      </el-table-column>
     </el-table>
-    <!-- 添加表单 -->
-    <el-dialog title="表单新增" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="日期">
-          <el-input v-model="temp.date"></el-input>
-        </el-form-item>
-        <el-form-item label="名字">
-          <el-input v-model="temp.name"></el-input>
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-input v-model="temp.sex"></el-input>
-        </el-form-item>
-        <el-form-item label="年龄">
-          <el-input v-model="temp.age"></el-input>
-        </el-form-item>
-        <el-form-item label="主治医生">
-          <el-input v-model="temp.doctor"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button class="btn" @click="dialogFormVisible = false">取 消</el-button>
-        <el-button class="btn" type="primary" @click="handleCreateSubmit">确 定</el-button>
-      </div>
-    </el-dialog>
-    <!-- 编辑表单 -->
-    <el-dialog title="编辑表单" :data="tableData" :visible.sync="dialogFormEditVisible">
-      <el-form class="small-space" :model="Edit" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="姓名">
-          <el-input v-model="Edit.name"></el-input>
-        </el-form-item>
-        <el-form-item label="患者姓名">
-          <el-input v-model="Edit.name"></el-input>
-        </el-form-item>
-        <el-form-item label="患者来源">
-          <el-input v-model="Edit.region"></el-input>
-        </el-form-item>
-        <el-form-item label="身份证号">
-          <el-input v-model="Edit.idCard"></el-input>
-        </el-form-item>
-        <el-form-item label="患者年龄">
-          <el-input v-model="Edit.age"></el-input>
-        </el-form-item>
-        <el-form-item label="联系方式">
-          <el-input v-model="Edit.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="患者性别">
-          <el-input v-model="Edit.sex"></el-input>
-        </el-form-item>
-        <el-form-item label="家庭地址">
-          <el-input v-model="Edit.address"></el-input>
-        </el-form-item>
-        <el-form-item label="联系人姓名">
-          <el-input v-model="Edit.Name"></el-input>
-        </el-form-item>
-        <el-form-item label="联系人号码">
-          <el-input v-model="Edit.Phone"></el-input>
-        </el-form-item>
-        <el-form-item label="患者与联系人关系">
-          <el-input v-model="Edit.relation"></el-input>
-        </el-form-item>
-        <el-form-item label="病症">
-          <el-input v-model="Edit.symptoms"></el-input>
-        </el-form-item>
-        <el-form-item label="病史">
-          <el-input v-model="Edit.illHistory"></el-input>
-        </el-form-item>
-        <el-form-item label="科室">
-          <el-input v-model="Edit.disease"></el-input>
-        </el-form-item>
-        <el-form-item label="主治医生">
-         <el-input v-model="Edit.doctor"></el-input>
-        </el-form-item>
-      </el-form>
+      <el-dialog title="编辑表单" :data="patients" :visible.sync="dialogFormEditVisible">
+        <el-form class="small-space" :model="patientsDetails" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
+          <el-form-item label="省份">
+            <el-input v-model="patientsDetails.province"></el-input>
+          </el-form-item>
+          <el-form-item label="城市">
+            <el-input v-model="patientsDetails.city"></el-input>
+          </el-form-item>
+          <el-form-item label="详细地址">
+            <el-input v-model="patientsDetails.moreAddress"></el-input>
+          </el-form-item>
+          <el-form-item label="手机">
+            <el-input v-model="patientsDetails.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="联系人姓名">
+            <el-input v-model="patientsDetails.relatedName"></el-input>
+          </el-form-item>
+          <el-form-item label="联系方式">
+            <el-input v-model="patientsDetails.relatedPhoneNumber"></el-input>
+          </el-form-item>
+          <el-form-item label="与患者关系">
+            <el-input v-model="patientsDetails.relationship"></el-input>
+          </el-form-item>
+          <el-form-item label="身体状况">
+            <el-input v-model="patientsDetails.symptoms"></el-input>
+          </el-form-item>
+          <el-form-item label="病史">
+            <el-input v-model="patientsDetails.illHistory"></el-input>
+          </el-form-item>
+        </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button class="btn" @click="dialogFormEditVisible = false">取 消</el-button>
         <el-button class="btn" type="primary" @click="handleEditSubmit">确 定</el-button>
@@ -161,11 +118,10 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import {api} from '../../../global/api.js';
 export default {
   data () {
     return {
-      tableData: [],
+      patients: [],
       listQuery: {
         select: '',
         title: ''
@@ -177,31 +133,28 @@ export default {
         age: '',
         doctor: ''
       },
-      Edit: {
-        name: '',
-        date: '',
-        region: '',
-        idCard: '',
-        age: '',
+      patientsDetails: {
+        province: '',
+        city: '',
+        moreAddress: '',
         phone: '',
-        sex: '',
-        address: '',
-        Name: '',
-        Phone: '',
-        relation: '',
+        relatedName: '',
+        relatedPhoneNumber: '',
+        relationship: '',
         symptoms: '',
         illHistory: '',
-        disease: '',
-        doctor: ''
+        region: ''
       },
       dialogFormEditVisible: false,
       dialogFormVisible: false,
-      multipleSelection: []
+      multipleSelection: [],
+      intendedPatients: []
     };
   },
   created () {
     this.$axios.get('http://localhost:8081/patient/queryAllPatient').then(response => {
-      this.tableData = response.data;
+      this.intendedPatients = response.data;
+      this.patients = this.intendedPatients;
     }).catch(error => {
       console.error(error);
     });
@@ -217,45 +170,49 @@ export default {
       }
       return moment(date).format('YYYY-MM-DD HH:mm:ss');
     },
+    showAll () {
+      this.patients = this.intendedPatients;
+      this.listQuery.title = '';
+      this.listQuery.select = '';
+    },
     handleSearch () {
-      this.$axios.get(api.patientList, {params: {name: this.listQuery.title}}).then(response => {
-        this.tableData = response.data.tableData;
-      }).catch(error => {
-        console.error(error);
-      });
+      if (this.listQuery.title && this.listQuery.select) {
+        this.patients = [];
+        for (let i = 0; i < this.intendedPatients.length; i++) {
+          if (this.listQuery.select === '1') {
+            if (this.intendedPatients[i].姓名 === this.listQuery.title) {
+              this.patients.push(this.intendedPatients[i]);
+            }
+          }
+        }
+      } else {
+        this.$notify.error('请选择条件');
+      }
     },
     handleEdit (index, row) {
       this.dialogFormEditVisible = true;
-      this.Edit = row;// 浅拷贝
-      // 深度拷贝
-      // this.Edit = JSON.parse(JSON.stringify(row));
+      this.patientsDetails.province = row.省份;
+      this.patientsDetails.city = row.城市;
+      this.patientsDetails.moreAddress = row.详细地址;
+      this.patientsDetails.phone = row.手机;
+      this.patientsDetails.relatedName = row.联系人姓名;
+      this.patientsDetails.relatedPhoneNumber = row.联系方式;
+      this.patientsDetails.relationship = row.与患者关系;
+      this.patientsDetails.symptoms = row.身体状况;
+      this.patientsDetails.illHistory = row.病史;
     },
     handleEditSubmit () {
-      this.Edit;
       this.dialogFormEditVisible = false;
+      this.$notify.success('修改成功');
+      // TODO
+      console.log(JSON.stringify(this.patientsDetails));
     },
     handleDelete (index, row) {
       console.log('单个删除选择的row：', index, '-----', row);
-      this.tableData.splice(index, 1);
+      this.patients.splice(index, 1);
     },
     handleCreate () {
       this.dialogFormVisible = true;
-    },
-    handleCreateSubmit () {
-      console.log('新增入参：', this.temp);
-      this.tableData
-      .push(this.temp);
-      this.dialogFormVisible = false;
-      this.temp = {
-        date: '',
-        name: '',
-        sex: '',
-        age: '',
-        doctor: ''
-      };
-    },
-    handleDelAll () {
-      console.log('批量删除选择的row：', JSON.stringify(this.multipleSelection));
     },
     handleSelectionChange (val) {
       this.multipleSelection = [];
@@ -277,13 +234,16 @@ export default {
         const { export_json_to_excel } = require('vendor/Export2Excel');
         const tHeader = ['日期', '名字', '性别', '地址', '联系号码', '年龄', '主治医生'];
         const filterVal = ['date', 'name', 'sex', 'address', 'phone', 'age', 'doctor'];
-        const tableData = this.tableData;
-        const data = this.formatJson(filterVal, tableData);
+        const patients = this.patients;
+        const data = this.formatJson(filterVal, patients);
         export_json_to_excel(tHeader, data, '导出的列表excel');
       });
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]));
+    },
+    handleDelAll () {
+      console.log('批量删除选择的row：', JSON.stringify(this.multipleSelection));
     }
   }
 };
@@ -291,15 +251,20 @@ export default {
 </script>
 
 <style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
-  .hasPatient .demo-table-expand
-    font-size: 0
+  .hasPatient
+    .demo-table-expand label
+      width: 90px
+      color: #99a9bf
 
-  .hasPatient .demo-table-expand label
-    width: 90px
-    color: #99a9bf
+    .demo-table-expand .el-form-item
+      margin-right: 0
+      margin-bottom: 0
+      width: 33%
 
-  .hasPatient .demo-table-expand .el-form-item
-    margin-right: 0
-    margin-bottom: 0
-    width: 33%
+  .patients-detail
+    h5
+      display: inline-block
+      width: 100px
+      line-height: 30px
+      font-weight: bold
 </style>
