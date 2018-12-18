@@ -107,7 +107,7 @@
             <el-menu-item-group>
               <el-menu-item index="8-1"><router-link to="hisIntroduction">医院基本介绍</router-link></el-menu-item>
               <el-menu-item index="8-2"><router-link to="staffIntroduction">医生护士概况</router-link></el-menu-item>
-              <el-menu-item index="8-3"><router-link to="patientCount">今周患者就诊数量统计</router-link></el-menu-item>
+              <el-menu-item index="8-3"><router-link to="patientCount">本周患者就诊数量统计</router-link></el-menu-item>
               <el-menu-item index="8-4"><router-link to="patientFeedback">患者反馈</router-link></el-menu-item>
             </el-menu-item-group>
           </el-submenu>

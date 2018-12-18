@@ -16,7 +16,7 @@
       return {
         bar: {
           title: {
-            text: '今周患者就诊数量统计',
+            text: '本周患者就诊数量统计',
             subtext: '各个部门数据',
             x: 'center'
           },
@@ -35,7 +35,6 @@
     },
     mounted () {
       this.$axios.get('http://localhost:8081/register/getRegisterGroupByDepartment').then(response => {
-        console.log(JSON.stringify(response.data));
         this.bar.series = [
           {
             name: '访问来源',
@@ -52,7 +51,6 @@
             }
           }
         ];
-        console.log(JSON.stringify(this.bar.series));
       }).catch(error => {
         console.error(error);
       });
