@@ -1,147 +1,69 @@
 <template>
-  <div class="patientCount">
-    <div class="title">
-      <p>医院患者数量周统计表</p>
-    </div>
-
-    <div class="tableCount">
-      <el-table :data="table1" height="327" show-summary :summary-method="getSummaries" border style="width:330px">
-        <el-table-column label="星期一">
-          <el-table-column prop="department"  :summary-method="getSummaries"label="科室" width="120"></el-table-column>
-          <el-table-column prop="date" label="就诊日期" width="120"></el-table-column>
-          <el-table-column prop="number" label="就诊人数" width="120"></el-table-column>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="tableCount">
-      <el-table :data="table2" height="327" show-summary :summary-method="getSummaries" border style="width:330px">
-        <el-table-column label="星期二">
-          <el-table-column prop="department" label="科室" width="120"></el-table-column>
-          <el-table-column prop="date" label="就诊日期" width="120"></el-table-column>
-          <el-table-column prop="number" label="就诊人数" width="120"></el-table-column>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="tableCount">
-      <el-table :data="table3" height="327" show-summary :summary-method="getSummaries" border style="width:330px">
-        <el-table-column label="星期三">
-          <el-table-column prop="department" label="科室" width="120"></el-table-column>
-          <el-table-column prop="date" label="就诊日期" width="120"></el-table-column>
-          <el-table-column prop="number" label="就诊人数" width="120"></el-table-column>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="tableCount">
-      <el-table :data="table4" height="327" show-summary :summary-method="getSummaries" border style="width:330px">
-        <el-table-column label="星期四">
-          <el-table-column prop="department" label="科室" width="120"></el-table-column>
-          <el-table-column prop="date" label="就诊日期" width="120"></el-table-column>
-          <el-table-column prop="number" label="就诊人数" width="120"></el-table-column>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="tableCount">
-      <el-table :data="table5" height="327" show-summary :summary-method="getSummaries" border style="width:330px">
-        <el-table-column label="星期五">
-          <el-table-column prop="department" label="科室" width="120"></el-table-column>
-          <el-table-column prop="date" label="就诊日期" width="120"></el-table-column>
-          <el-table-column prop="number" label="就诊人数" width="120"></el-table-column>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="tableCount">
-      <el-table :data="table6" height="327" show-summary :summary-method="getSummaries" border style="width:330px">
-        <el-table-column label="星期六">
-          <el-table-column prop="department" label="科室" width="120"></el-table-column>
-          <el-table-column prop="date" label="就诊日期" width="120"></el-table-column>
-          <el-table-column prop="number" label="就诊人数" width="120"></el-table-column>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="tableCount">
-      <el-table :data="table7" height="327" show-summary :summary-method="getSummaries" border style="width:330px">
-        <el-table-column label="星期日">
-          <el-table-column prop="department" label="科室" width="120"></el-table-column>
-          <el-table-column prop="date" label="就诊日期" width="120"></el-table-column>
-          <el-table-column prop="number" label="就诊人数" width="120"></el-table-column>
-        </el-table-column>
-      </el-table>
-    </div>
-   <!--  <div class="button">
-      <el-button type="primary" size="big" @click="amount">查看总人数</el-button>
-    </div> -->
+  <div id="app">
+    <v-chart class="my-chart" :options="bar"/>
   </div>
 </template>
-
-<script type="text/ecmascript-6">
-  import {api} from '../../../global/api.js';
+<script>
+  let echarts = require('vue-echarts');
+  require('echarts/lib/chart/bar');
+  require('echarts/lib/component/tooltip');
+  require('echarts/lib/component/title');
   export default {
+    components: {
+      'v-chart': echarts
+    },
     data () {
       return {
-        table1: [],
-        table2: [],
-        table3: [],
-        table4: [],
-        table5: [],
-        table6: [],
-        table7: [],
-        personSum: []
+        bar: {
+          title: {
+            text: '今周患者就诊数量统计',
+            subtext: '各个部门数据',
+            x: 'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['内科', '外科', '妇产科', '男科', '儿科', '五官科', '骨科', '精神科', '护士科', '胸心外科', '口腔科']
+          },
+          series: []
+        }
       };
     },
-    methods: {
-      getSummaries (param) {
-        const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          if (index === 0) {
-            sums[index] = '合计';
-            return;
-          }
-          const values = data.map(item => Number(item[column.property]));
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
+    mounted () {
+      this.$axios.get('http://localhost:8081/register/getRegisterGroupByDepartment').then(response => {
+        console.log(JSON.stringify(response.data));
+        this.bar.series = [
+          {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: response.data,
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
-            }, 0);
-            this.personSum = sums[index];
-            sums[index] += ' 人';
-          } else {
-            sums[index] = '';
+            }
           }
-        });
-        return sums;
-      }
-    },
-    created () {
-      this.$axios.get(api.patientCount).then(response => {
-        this.table1 = response.data.table1;
-        this.table2 = response.data.table2;
-        this.table3 = response.data.table3;
-        this.table4 = response.data.table4;
-        this.table5 = response.data.table5;
-        this.table6 = response.data.table6;
-        this.table7 = response.data.table7;
+        ];
+        console.log(JSON.stringify(this.bar.series));
       }).catch(error => {
         console.error(error);
       });
     }
   };
 </script>
-
-<style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
-  .patientCount
-    height:1100px
-  .patientCount .title
-    p
-      font-size:24px
-      text-align:center
-      margin-bottom:20px
-  .patientCount .tableCount
-    float:left
-    padding-bottom:20px
-    padding-left:80px
+<style>
+  .my-chart {
+    width: 800px;
+    height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 </style>
