@@ -160,45 +160,46 @@
 <style lang="stylus-loader" rel="stylesheet/stylus" type="text/stylus">
   span
     font-weight: bold
+
   .innnerApp
-    background-color:#fff
+    background-color: #fff
     min-height: 800px
-    .el-menu-item>a
+    .el-menu-item > a
       padding-left: 21px
-      display:inline-block
-      height:100%
-      width:100%
-      color:#bfcbd9
+      display: inline-block
+      height: 100%
+      width: 100%
+      color: #bfcbd9
       &.router-link-active
         color: #20a0ff
     .app-body
       .menu
-        position:fixed
-        z-index:9999
-        height:100%
-        width:230px
+        position: fixed
+        z-index: 9999
+        height: 100%
+        width: 230px
         transition: width 0.4s
-        background-color:#324157
+        background-color: #324157
         overflow-y: scroll
         .el-menu--dark
           background-color: transparent
         &.smallNav
-          width:64px
+          width: 64px
           overflow-y: visible
           .el-menu-item
           .el-submenu__title
             span
-              display:none
+              display: none
             .el-submenu__icon-arrow
-              display:none
+              display: none
       .content
-        padding-left:60px
+        padding-left: 60px
         .tagcontent
-          padding:20px
+          padding: 20px
         .HISshow
-          opacity:1
-          transition:all 0.5s
-        .HISshow-enter,.HISshow-leave-active
-          opacity:0
-          transition:all 0.5s
+          opacity: 1
+          transition: all 0.5s
+        .HISshow-enter, .HISshow-leave-active
+          opacity: 0
+          transition: all 0.5s
 </style>
